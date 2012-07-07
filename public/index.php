@@ -1,2 +1,2 @@
 <?php
-echo "skillbaz.dev";
+echo "skillbaz.ch";
