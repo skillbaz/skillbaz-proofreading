@@ -10,13 +10,36 @@ abstract class ServiceBase
 	 */
 	protected $em;
 	
+	
+	/**
+	 * @var Acl\Acl
+	 * @Inject Acl\Acl
+	 */
 	protected $acl;
 	
+	
+	/**
+	 * @var Acl\ContextProvider
+	 * @Inject Acl\ContextProvider
+	 */
+	protected $contextProvider;
+	
+	
 	abstract public function _setupAcl();
+	
 	
 	public function getResourceId()
 	{	
 		return get_class($this);	
+	}
+	
+	
+	/**
+	 * @return Acl\Context
+	 */
+	public function getContext()
+	{
+		$this->contextProvider->getContext();
 	}
 	
 	
