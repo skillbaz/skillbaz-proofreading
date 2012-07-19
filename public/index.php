@@ -23,6 +23,4 @@ $application = new Zend_Application(
     APPLICATION_PATH . '/configs/application.ini'
 );
 $application->bootstrap();
-//$application->run();
-
-$s = new Service\RegisterService();
+$application->run();
