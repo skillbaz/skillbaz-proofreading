@@ -22,7 +22,7 @@ class UIdManager
 	{
 		$entity = $eventArgs->getEntity();
 		
-		if($entity instanceof \Core\Entity\Base)
+		if($entity instanceof \Core\Entity\BaseEntity)
 		{
 			$class = get_class($entity);
 			$uid = $this->getUid($class);
@@ -36,7 +36,7 @@ class UIdManager
 	{
 		$entity = $eventArgs->getEntity();
 	
-		if($entity instanceof \Core\Entity\Base)
+		if($entity instanceof \Core\Entity\BaseEntity)
 		{
 			$q = $this->em->createQuery(self::DELETE_UID);
 			$q->execute(array('id' => $entity->getId()));
@@ -57,9 +57,9 @@ class UIdManager
 
 
 class EntityIdSetter
-	extends \Core\Entity\Base
+	extends \Core\Entity\BaseEntity
 {
-	public static function SetId(\Core\Entity\Base $entity, $id)
+	public static function SetId(\Core\Entity\BaseEntity $entity, $id)
 	{
 		$entity->id = $id;
 	}

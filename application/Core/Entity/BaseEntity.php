@@ -6,7 +6,7 @@ namespace Core\Entity;
  * @MappedSuperclass
  * @HasLifecycleCallbacks
  */
-class Base
+class BaseEntity
 {
 	/** 
 	 * @Column(name="created_at", type="datetime") 

@@ -2,14 +2,14 @@
 
 namespace Entity;
 
-use Core\Entity\Base;
+use Core\Entity\BaseEntity;
 
 
 /**
  * @Entity
  * @Table(name="logins")
  */
-class Login extends Base
+class Login extends BaseEntity
 {
 	
 	/**

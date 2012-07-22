@@ -2,7 +2,7 @@
 
 namespace Entity;
 
-use Core\Entity\Base;
+use Core\Entity\BaseEntity;
 
 
 /**
@@ -10,7 +10,7 @@ use Core\Entity\Base;
  * @Table(name="users")
  *
  */
-class User extends Base
+class User extends BaseEntity
 {
 	
 	/**

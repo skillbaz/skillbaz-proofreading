@@ -42,12 +42,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$container = new Bisna\Doctrine\Container($opt);
 		\Zend_Registry::set('doctrineContainer', $container);
 		
-		
-		/** Setup UIdManager: */
-		$UIdManager = $kernel->Get('Core\UIdManager');
-		$em = $container->getEntityManager();
-		$em->getEventManager()->addEventListener(array('prePersist', 'preRemove'), $UIdManager);
-		
 		/** return DoctrineContainer */
 		return $container;
 	}
@@ -71,6 +65,16 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		
 		
 		//todo: register Services
+	}
+	
+	public function _initUIdManagerSetup()
+	{
+		$kernel = Zend_Registry::get("kernel");
+		
+		/** Setup UIdManager: */
+		$UIdManager = $kernel->Get('Core\Entity\UIdManager');
+		$em = $kernel->Get('Doctrine\ORM\EntityManager');
+		$em->getEventManager()->addEventListener(array('prePersist', 'preRemove'), $UIdManager);
 	}
 }
 
