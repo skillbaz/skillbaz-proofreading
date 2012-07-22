@@ -1,5 +1,5 @@
 <?php
-namespace Service;
+namespace Core\Service;
 
 abstract class ServiceBase
 	implements \Zend_Acl_Resource_Interface
@@ -12,15 +12,15 @@ abstract class ServiceBase
 	
 	
 	/**
-	 * @var Acl\Acl
-	 * @Inject Acl\Acl
+	 * @var Core\Acl\Acl
+	 * @Inject Core\Acl\Acl
 	 */
 	protected $acl;
 	
 	
 	/**
-	 * @var Acl\ContextProvider
-	 * @Inject Acl\ContextProvider
+	 * @var Core\Acl\ContextProvider
+	 * @Inject Core\Acl\ContextProvider
 	 */
 	protected $contextProvider;
 	
@@ -35,7 +35,7 @@ abstract class ServiceBase
 	
 	
 	/**
-	 * @return Acl\Context
+	 * @return Core\Acl\Context
 	 */
 	public function getContext()
 	{

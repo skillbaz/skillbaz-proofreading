@@ -1,9 +1,7 @@
 <?php
 
-namespace Acl;
+namespace Core\Acl;
 
-
-use Acl\Context;
 
 class ContextStorage
 {
@@ -43,7 +41,7 @@ class ContextStorage
 	
 	
 	/**
-	 * @return Acl\Context
+	 * @return Core\Acl\Context
 	 */
 	public function getContext()
 	{

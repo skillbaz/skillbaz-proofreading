@@ -1,20 +1,20 @@
 <?php
 
-namespace Acl;
+namespace Core\Acl;
 
 
 class ContextProvider
 {
 	
 	/**
-	 * @var Acl\ContextStorage
-	 * @Inject Acl\ContextStorage
+	 * @var Core\Acl\ContextStorage
+	 * @Inject Core\Acl\ContextStorage
 	 */
 	protected $contextStorage;
 	
 	
 	/**
-	 * @return Acl\Context
+	 * @return Core\Acl\Context
 	 */
 	public function getContext()
 	{

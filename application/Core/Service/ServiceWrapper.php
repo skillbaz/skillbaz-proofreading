@@ -1,6 +1,6 @@
 <?php
 
-namespace Service;
+namespace Core\Service;
 
 use Bisna\Application\Resource\Doctrine;
 

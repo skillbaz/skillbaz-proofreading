@@ -20,8 +20,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$autoloader->pushAutoloader(array($PhpdiAutoloader, 'loadClass'), 'PhpDI');
 		
 		
-		$aclAutoloader = new \Doctrine\Common\ClassLoader('Acl', APPLICATION_PATH);
-		$autoloader->pushAutoloader(array($aclAutoloader, 'loadClass'), 'Acl');
+		
+		$coreAutoloader = new \Doctrine\Common\ClassLoader('Core', APPLICATION_PATH);
+		$autoloader->pushAutoloader(array($coreAutoloader, 'loadClass'), 'Core');
 		
 		$entityAutoloader = new \Doctrine\Common\ClassLoader('Entity', APPLICATION_PATH);
 		$autoloader->pushAutoloader(array($entityAutoloader, 'loadClass'), 'Entity');
@@ -36,9 +37,18 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	 */
 	protected function _initSetupDoctrine()
 	{
+		/** Setup Doctrine: */
 		$opt = $this->getOption('doctrine');
 		$container = new Bisna\Doctrine\Container($opt);
 		\Zend_Registry::set('doctrineContainer', $container);
+		
+		
+		/** Setup UIdManager: */
+		$UIdManager = $kernel->Get('Core\UIdManager');
+		$em = $container->getEntityManager();
+		$em->getEventManager()->addEventListener(array('prePersist', 'preRemove'), $UIdManager);
+		
+		/** return DoctrineContainer */
 		return $container;
 	}
 	
@@ -55,9 +65,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$kernel->Bind("Doctrine\ORM\EntityManager")
 				->ToConstant(Zend_Registry::get('doctrineContainer')->getEntityManager());
 		
-		$kernel->Bind("Acl\Acl")->ToSelf()->AsSingleton();
-		$kernel->Bind("Acl\ContextStorage")->ToSelf()->AsSingleton();
-		$kernel->Bind("Acl\ContextProvider")->ToSelf()->AsSingleton();
+		$kernel->Bind("Core\Acl\Acl")->ToSelf()->AsSingleton();
+		$kernel->Bind("Core\Acl\ContextStorage")->ToSelf()->AsSingleton();
+		$kernel->Bind("Core\Acl\ContextProvider")->ToSelf()->AsSingleton();
 		
 		
 		//todo: register Services

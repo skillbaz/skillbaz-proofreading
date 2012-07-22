@@ -1,6 +1,6 @@
 <?php
 
-namespace Acl;
+namespace Core\Acl;
 
 use Entity\User;
 use Entity\Proofreader;

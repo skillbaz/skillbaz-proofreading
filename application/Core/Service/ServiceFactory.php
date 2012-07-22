@@ -1,6 +1,6 @@
 <?php
 
-namespace Service;
+namespace Core\Service;
 
 class ServiceFactory
 	implements \PhpDI\Factory\IFactory

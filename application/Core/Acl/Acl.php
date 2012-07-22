@@ -1,6 +1,6 @@
 <?php
 
-namespace Acl;
+namespace Core\Acl;
 
 
 class Acl extends \Zend_Acl
@@ -23,8 +23,8 @@ class Acl extends \Zend_Acl
 	
 	
 	/**
-	 * @var Acl\ContextStorage
-	 * @Inject Acl\ContextStorage
+	 * @var Core\Acl\ContextStorage
+	 * @Inject Core\Acl\ContextStorage
 	 */
 	protected $contextStorage;
 	
