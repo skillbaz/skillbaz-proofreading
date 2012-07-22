@@ -1,5 +1,7 @@
 <?php
 
+use Core\Service\ServiceFactory;
+
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
 	
@@ -64,7 +66,30 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$kernel->Bind("Core\Acl\ContextProvider")->ToSelf()->AsSingleton();
 		
 		
-		//todo: register Services
+		// register services in kernel:
+		$this->registerService("Service\UserService");
+		$this->registerService("Service\LoginService");
+	}
+	
+	
+	/**
+	 * Registers a Service for public (but protected with ACL)
+	 * and for in-Service calls.
+	 * 
+	 * The serviceWrapper is registered under Acl\Service\AnyService
+	 * The raw service is registered under Service\AnyService
+	 * 
+	 * @param string $serviceClass
+	 */
+	private function registerService($serviceClass)
+	{
+		$kernel = Zend_Registry::get("kernel");
+		
+		// registers the service for in-service calls:
+		$kernel->Bind($serviceClass)->ToSelf()->AsSingleton();
+		
+		// registers the service for protected calls:
+		$kernel->Bind("Acl\\" . $serviceClass)->ToFactory(new ServiceFactory($kernel, $serviceClass));
 	}
 	
 	public function _initUIdManagerSetup()

@@ -12,15 +12,22 @@ class ServiceFactory
 	private $service;
 	
 	
-	public function __construct($service)
+	/**
+	 * @var PhpDI\IKernel
+	 */
+	private $kernel;
+	
+	
+	public function __construct(\PhpDI\IKernel $kernel, $service)
 	{
+		$this->kernel = $kernel;
 		$this->service = $service;
 	}
 	
 	public function create()
 	{
-		$serviceFactory = new \PhpDI\Factory\Constructor($this->service);
-		$serviceWrapper = new ServiceWrapper($serviceFactory->create());
+		$service = $this->kernel->Get($this->service);
+		$serviceWrapper = new ServiceWrapper($service);
 		
 		return $serviceWrapper;
 	}
