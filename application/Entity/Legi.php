@@ -2,6 +2,8 @@
 
 namespace Entity;
 
+use Doctrine\DBAL\Types\StringType;
+
 use Core\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -34,29 +36,38 @@ class Legi extends BaseEntity
 	
 	
 	
+	/**
+	 * @return string
+	 */
+	public function getLegiNumber(){
+		return $this->legiNumber;
+	}	
 	public function setLegiNumber($legiNumber){
 		$this->legiNumber = $legiNumber;
 	}
 	
-	public function getLegiNumber(){
-		return $this->legiNumber;
-	}
 	
+	/**
+	 * @return string
+	 */
+	public function getUniversity(){
+		return $this->university;
+	}	
 	public function setUniversity($university){
 		$this->university = $university;
 	}
 	
-	public function getUniversity(){
-		return $this->university;
-	}
-	
+
+	/**
+	 * @return date
+	 */
+	public function getValidity(){
+		return $this->validity;
+	}	
 	public function setValidity($validity){
 		$this->validity = $validityty;
 	}
 	
-	public function getValidity(){
-		return $this->validity;
-	}
 	
 	/**
 	 * @return User

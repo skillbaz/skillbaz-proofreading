@@ -35,7 +35,7 @@ class User extends BaseEntity
 	
 	
 //	/**
-//	 * @var Entity\Member
+//	 * @var \Doctrine\Common\Collection\ArrayCollection
 //	 * @ORM\OneToMany(targetEntity="Member", mappedBy="user")
 //	 */
 //	private $members;
@@ -83,7 +83,7 @@ class User extends BaseEntity
 	
 	
 //	/**
-//	 * @var Entity\Order
+//	 * @var \Doctrine\Common\Collections\ArrayCollection
 //	 * @ORM\OneToMany(targetEntity="Order", mappedBy="user")
 //	 */
 //	private $orders;
@@ -98,7 +98,7 @@ class User extends BaseEntity
 	
 	
 //	/**
-//	 * @var Entity\Discussion
+//	 * @var \Doctrine\Common\Collections\ArrayCollection
 //	 * @ORM\OneToMany(targetEntity="Discussion", mappedBy="user")
 //	 */
 //	private $discussions;
@@ -111,26 +111,27 @@ class User extends BaseEntity
 //	private $proofreader;
 	
 	
-	
-	
+	/**
+	 * @return string
+	 */
+	public function getEmail(){
+		return $this->email;
+	}	
 	public function setEmail($email){
 		$this->email = $email;
 	}
 	
-	public function getEmail(){
-		return $this->email;
-	}
 	
-	
+	/**
+	 * @return boolean
+	 */
+	public function getActive(){
+		return $this->active;
+	}	
 	public function setActive($active = true){
 		$this->active = $active;
 	}
 		
-		
-	public function getActive(){
-		return $this->active;
-	}
-	
 	
 	/**
 	 * @return Login
@@ -142,38 +143,43 @@ class User extends BaseEntity
 	
 	
 //	/**
-//	 * @return Member
+//	 * @return array
 //	 */
-//	public function getMembers()
-//	{
+//	public function getMembers(){
 //		return $this->members;
 //	}
 	
 	
+	/**
+	 * @return string
+	 */
+	public function getFirstname(){
+		return $this->firstname;
+	}	
 	public function setFirstname($firstname){
 		$this->firstname = $firstname;
 	}
 	
-	public function getFirstname(){
-		return $this->firstname;
-	}
-	
-	
+
+	/**
+	 * @return string
+	 */
+	public function getSurname(){
+		return $this->surname;
+	}	
 	public function setSurname($surname){
 		$this->surname = $surname;
 	}
 	
-	public function getSurname(){
-		return $this->surname;
-	}
-	
-	
-	public function setSkype($skype){
-		$this->skype = $skype;
-	}
-	
+
+	/**
+	 * @return string
+	 */
 	public function getSkype(){
 		return $this->skype;
+	}	
+	public function setSkype($skype){
+		$this->skype = $skype;
 	}
 	
 	
@@ -197,14 +203,23 @@ class User extends BaseEntity
 	}
 	
 
+	/**
+	 * @return string
+	 */
+	public function getPrefLanguage(){
+		return $this->preflanguage;
+	}	
 	public function setPrefLanguage($preflanguage){
 		$this->preflanguage = $preflanguage;
 	}
 	
-	public function getPrefLanguage(){
-		return $this->preflanguage;
-	}
 	
+	/**
+	 * @return Legi
+	 */
+	public function getLegi(){
+		return $this->legi;
+	}	
 	
 	/**
 	 * Set the Legi of this User Entity
@@ -214,21 +229,22 @@ class User extends BaseEntity
 	}
 	
 	
-	/**
-	 * @return Legi
-	 */
-	public function getLegi(){
-		return $this->legi;
-	}
-	
 	
 //	/**
-//	 * @return Order
+//	 * @return array
 //	 */
 //	public function getOrders(){
 //		return $this->orders;
 //	}
-	
+
+
+//	/**
+//	 * @return Address
+//	 */
+//	public function getAddress(){
+//		return $this->address;
+//	}	
+
 //	/**
 //	 * Set the Address of this User Entity
 //	 */
@@ -236,16 +252,9 @@ class User extends BaseEntity
 //		$this->address = $address;
 //	}
 	
-//	/**
-//	 * @return Address
-//	 */
-//	public function getAddress(){
-//		return $this->address;
-//	}
-	
 		
 //	/**
-//	 * @return Discussion
+//	 * @return array
 //	 */
 //	public function getDiscussions(){
 //		return $this->discussions;
