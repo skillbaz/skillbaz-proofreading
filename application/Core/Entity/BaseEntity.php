@@ -2,26 +2,28 @@
 
 namespace Core\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
- * @MappedSuperclass
- * @HasLifecycleCallbacks
+ * @ORM\MappedSuperclass
+ * @ORM\HasLifecycleCallbacks
  */
 class BaseEntity
 {
 	/** 
-	 * @Column(name="created_at", type="datetime") 
+	 * @ORM\Column(name="created_at", type="datetime") 
 	 */
 	private $createdAt;
 	
 	/**
-	 * @Column(name="updated_at", type="datetime")
+	 * @ORM\Column(name="updated_at", type="datetime")
 	 */
 	private $updatedAt;
 	
 	/**
 	 * @var string
-	 * @Id
-	 * @Column(name="id", type="string")
+	 * @ORM\Id
+	 * @ORM\Column(name="id", type="string")
 	 */
 	protected $id;
 	
@@ -52,7 +54,7 @@ class BaseEntity
 	
 	
 	/**
-	 * @PrePersist
+	 * @ORM\PrePersist
 	 */
 	public function PrePersist()
 	{
@@ -61,7 +63,7 @@ class BaseEntity
 	}
 	
 	/**
-	 * @PreUpdate
+	 * @ORM\PreUpdate
 	 */
 	public function PreUpdate()
 	{

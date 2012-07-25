@@ -3,31 +3,31 @@
 namespace Entity;
 
 use Core\Entity\BaseEntity;
-
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @Entity
- * @Table(name="logins")
+ * @ORM\Entity
+ * @ORM\Table(name="logins")
  */
 class Login extends BaseEntity
 {
 	
 	/**
-	 * @Column(type="string", length=64)
+	 * @ORM\Column(type="string", length=64)
 	 * @var string
 	 */
 	private $password;
 	
 	
 	/**
-	 * @Column(type="string", length=64)
+	 * @ORM\Column(type="string", length=64)
 	 * @var string
 	 */
 	private $salt;
 	
 	
 	/**
-	 * @Column(type="string", length=64, nullable=true)
+	 * @ORM\Column(type="string", length=64, nullable=true)
 	 * @var string
 	 */
 	private $pwResetKey;
@@ -35,8 +35,8 @@ class Login extends BaseEntity
 	
 	/**
 	 * @var User
-	 * @OneToOne(targetEntity="User", mappedBy="login")
-	 * @JoinColumn(name="user_id", referencedColumnName="id")
+	 * @ORM\OneToOne(targetEntity="User", mappedBy="login")
+	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
 	 */
 	public $user;
 	
