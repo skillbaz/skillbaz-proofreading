@@ -22,7 +22,7 @@ class Legi extends BaseEntity
 	private $university;
 	
 	/**
-	 * @ORM\Column(type="date", nullable=false)
+	 * @ORM\Column(type="date", nullable=true)
 	 */
 	private $validity;
 	

@@ -36,9 +36,9 @@ class User extends BaseEntity
 	
 //	/**
 //	 * @var Entity\Member
-//	 * @ORM\OneToOne(targetEntity="Member", mappedBy="user")
+//	 * @ORM\OneToMany(targetEntity="Member", mappedBy="user")
 //	 */
-//	private $member;
+//	private $members;
 	
 	
 	/**
@@ -122,13 +122,10 @@ class User extends BaseEntity
 	}
 	
 	
-	public function setActive($active = true){
+	public function setActive($active){
 		$this->active = $active;
 	}
 		
-	public function setInactive($active = false){
-		$this->active = $active;
-	}
 		
 	public function getActive(){
 		return $this->active;
@@ -147,9 +144,9 @@ class User extends BaseEntity
 //	/**
 //	 * @return Member
 //	 */
-//	public function getMember()
+//	public function getMembers()
 //	{
-//		return $this->member;
+//		return $this->members;
 //	}
 	
 	
@@ -186,10 +183,6 @@ class User extends BaseEntity
 	public function createAcode()
 	{
 		$this->acode = md5(unique(microtime(true)));
-		return $this->acode;
-	}
-	
-	public function getAcode(){
 		return $this->acode;
 	}
 	
