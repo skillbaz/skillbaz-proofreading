@@ -1,5 +1,4 @@
 logs/*
 
 .*
-.*
-application/entities/proxy/*
+application/Entity/Proxy/*

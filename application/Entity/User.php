@@ -192,14 +192,25 @@ class User extends BaseEntity
 		return $this->acode;
 	}
 	
-	public function checkAcode($acode)
-	{
-		$code = $acode;
-		return $code == $this->acode;
-	}
-	
 	public function resetAcode(){
 		$this->acode = null;
+	}
+	
+	/**
+	 * Activates User if acode is correct.
+	 * Returns boolean whether activation was successful.
+	 * 
+	 * @param string $acode
+	 * @return bool
+	 */
+	public function activate($acode){
+		if($this->acode == $acode){
+			$this->setActive();
+			$this->resetAcode();
+			return true;
+		}
+		
+		return false;
 	}
 	
 

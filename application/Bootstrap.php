@@ -64,7 +64,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$kernel->Bind("Core\Acl\Acl")->ToSelf()->AsSingleton();
 		$kernel->Bind("Core\Acl\ContextStorage")->ToSelf()->AsSingleton();
 		$kernel->Bind("Core\Acl\ContextProvider")->ToSelf()->AsSingleton();
-		
+		$kernel->Bind("Core\Entity\EntitySerializer")->ToSelf()->AsSingleton();
 		
 		// register services in kernel:
 		$this->registerService("Service\UserService");
