@@ -122,7 +122,7 @@ class User extends BaseEntity
 	}
 	
 	
-	public function setActive($active){
+	public function setActive($active = true){
 		$this->active = $active;
 	}
 		
