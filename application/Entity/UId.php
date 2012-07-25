@@ -2,22 +2,24 @@
 
 namespace Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
- * @Entity
- * @Table(name="uid")
+ * @ORM\Entity
+ * @ORM\Table(name="uid")
  */
 class UId
 {
 	/**
 	 * @var string
-	 * @Id @Column(type="string")
+	 * @ORM\Id @ORM\Column(type="string")
 	 */
 	private $id;
 	
 	
 	/**
 	 * @var string
-	 * @Column(type="string")
+	 * @ORM\Column(type="string")
 	 */
 	private $class;
 	

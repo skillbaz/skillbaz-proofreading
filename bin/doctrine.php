@@ -28,7 +28,7 @@ $bootstrap = $application->bootstrap()->getBootstrap();
 $bootstrap->bootstrap();
 
 // Retrieve Doctrine Container resource
-$container = \Zend_Registry::get('doctrine');
+$container = \Zend_Registry::get('doctrineContainer');
 
 // Console
 $cli = new \Symfony\Component\Console\Application(
