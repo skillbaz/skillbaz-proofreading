@@ -33,6 +33,12 @@ class Firm extends BaseEntity
 	
 	
 	/**
+	 * @var \Doctrine\Common\Collection\ArrayCollection
+	 * @ORM\OneToMany(targetEntity="Member", mappedBy="firm")
+	 */
+	private $members;
+	
+	/**
 	 * @return string
 	 */
 	public function getName()
@@ -74,5 +80,13 @@ class Firm extends BaseEntity
 		$this->address = $address;
 	}
 	
+	
+	/**
+	 * @return array
+	 */
+	public function getMembers()
+	{
+		return $this->members;
+	}
 	
 }

@@ -11,6 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Member extends BaseEntity
 {
+	const MEMBER	= 'member';
+	const BOSS		= 'boss';
+	
+	
 	/**
 	 * @ORM\Column(type="string", length=32, nullable=false)
 	 */
@@ -60,7 +64,7 @@ class Member extends BaseEntity
 	/**
 	 * @return Firm
 	 */
-    public function getFirm()
+	public function getFirm()
     {
     	return $this->firm;
     }
@@ -69,10 +73,5 @@ class Member extends BaseEntity
 		$this->firm = $firm;
 	}
 	
-	
-	
-	
-	
-	
-	
+		
 }
