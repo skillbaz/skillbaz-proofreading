@@ -34,11 +34,11 @@ class User extends BaseEntity
 	private $login;
 	
 	
-//	/**
-//	 * @var \Doctrine\Common\Collection\ArrayCollection
-//	 * @ORM\OneToMany(targetEntity="Member", mappedBy="user")
-//	 */
-//	private $members;
+	/**
+	 * @var \Doctrine\Common\Collection\ArrayCollection
+	 * @ORM\OneToMany(targetEntity="Member", mappedBy="user")
+	 */
+	private $members;
 	
 	
 	/**
@@ -89,12 +89,12 @@ class User extends BaseEntity
 //	private $orders;
 	
 	
-//	/**
-//	 * @var Entity\Address
-//	 * @ORM\OneToOne(targetEntity="Address", mappedBy="user")
-//	 * @ORM\JoinColumn(name="address_id", referencedColumnName="id")
-//	 */
-//	private $address;
+	/**
+	 * @var Entity\Address
+	 * @ORM\OneToOne(targetEntity="Address", mappedBy="user")
+	 * @ORM\JoinColumn(name="address_id", referencedColumnName="id")
+	 */
+	private $address;
 	
 	
 //	/**
@@ -142,12 +142,12 @@ class User extends BaseEntity
 	}
 	
 	
-//	/**
-//	 * @return array
-//	 */
-//	public function getMembers(){
-//		return $this->members;
-//	}
+	/**
+	 * @return array
+	 */
+	public function getMembers(){
+		return $this->members;
+	}
 	
 	
 	/**
@@ -249,19 +249,19 @@ class User extends BaseEntity
 //	}
 
 
-//	/**
-//	 * @return Address
-//	 */
-//	public function getAddress(){
-//		return $this->address;
-//	}	
+	/**
+	 * @return Address
+	 */
+	public function getAddress(){
+		return $this->address;
+	}	
 
-//	/**
-//	 * Set the Address of this User Entity
-//	 */
-//	public function setAddress(Address $address){
-//		$this->address = $address;
-//	}
+	/**
+	 * Set the Address of this User Entity
+	 */
+	public function setAddress(Address $address){
+		$this->address = $address;
+	}
 	
 		
 //	/**
