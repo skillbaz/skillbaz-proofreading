@@ -101,5 +101,32 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$em = $kernel->Get('Doctrine\ORM\EntityManager');
 		$em->getEventManager()->addEventListener(array('prePersist', 'preRemove'), $UIdManager);
 	}
+	
+	
+	public function _initRoute()
+	{
+		$kernel = Zend_Registry::get('kernel');
+		
+		$orderRoute = new Core\Router\UIdRoute(
+			'order/:order/:controller/:action',
+			array('controller' => 'index', 'action' => 'index'),
+			array('order' => new Core\Router\UIdCheck('Entity\Order'))
+		);
+		
+		$firmRoute = new Core\Router\UIdRoute(
+			'firm/:firm/:controller/:action',
+			array('controller' => 'index', 'action' => 'index'),
+			array('firm' => new Core\Router\UIdCheck('Entity\Firm'))
+		);
+		
+		
+		$kernel->Inject($orderRoute);
+		$kernel->Inject($firmRoute);
+		
+		
+		Zend_Controller_Front::getInstance()->getRouter()->addRoute('order', $orderRoute);
+		Zend_Controller_Front::getInstance()->getRouter()->addRoute('firm', $firmRoute);
+		
+	}
 }
 
