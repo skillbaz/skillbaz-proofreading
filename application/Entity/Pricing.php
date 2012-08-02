@@ -13,11 +13,33 @@ use Doctrine\ORM\Mapping as ORM;
 class Pricing extends BaseEntity
 {
 	
+	public function __construct($duration, $flatPrice, $maxWords, $wordPrice)
+	{
+		parent::__construct();
+		$this->duration = $duration;
+		$this->flatPrice = $flatPrice;
+		$this->maxWords = $maxWords;
+		$this->wordPrice = $wordPrice;
+	}
+	
+	
+	/**
+	 * Indicates whether this pricing scheme is active
+	 * @ORM\Column(type="boolean")
+	 */
+	private $active;
+	
 	/**
 	 * Name of the pricing scheme
 	 * @ORM\Column(type="string", length=32, nullable=false)
 	 */
 	private $name;
+	
+	/**
+	 * Description of the pricing scheme
+	 * @ORM\Column(type="text")
+	 */
+	private $description;
 	
 	/**
 	 * Duration until order must be delivered
@@ -45,6 +67,19 @@ class Pricing extends BaseEntity
 	
 	
 	/**
+	 * @return boolean  
+	 */
+	public function getActive()
+	{
+		return $this->active;
+	}
+	public function setActive($active = true)
+	{
+		$this->active = $active;
+	}
+	
+	
+	/**
 	 * @return string 
 	 */
 	public function getName()
@@ -58,15 +93,24 @@ class Pricing extends BaseEntity
 	
 	
 	/**
+	 * @return text
+	 */
+	public function getDescription()
+	{
+		return $this->description;
+	}
+	public function setDescription($description)
+	{
+		$this->description = $description;
+	}
+	
+	
+	/**
 	 * @return integer
 	 */
 	public function getDuration()
 	{
 		return $this->duration;
-	}
-	public function setDuration($duration)
-	{
-		$this->duration = $duration;
 	}
 	
 	
@@ -77,10 +121,6 @@ class Pricing extends BaseEntity
 	{
 		return $this->flatPrice;
 	}
-	public function setFlatPrice($flatPrice)
-	{
-		$this->flatPrice = $flatPrice;
-	}
 	
 	
 	/**
@@ -90,11 +130,7 @@ class Pricing extends BaseEntity
 	{
 		return $this->maxWords;
 	}
-	public function setMaxWords($maxWords)
-	{
-		$this->maxWords = $maxWords;
-	}
-	
+
 	
 	/**
 	 * @return decimal  
@@ -103,9 +139,5 @@ class Pricing extends BaseEntity
 	{
 		return $this->wordPrice;
 	}
-	public function setWordPrice($wordPrice)
-	{
-		$this->wordPrice = $wordPrice;
-	}
-	
+
 }

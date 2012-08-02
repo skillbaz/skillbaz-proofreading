@@ -23,12 +23,13 @@ class OrderLog extends BaseEntity
 	const CORRECTION_REJECTED 	= 	'correction rejected';
 	const CORRECTION_COMMENTED 	= 	'correction commented';
 	
-	
-	/**
-	 * Time indicator of the event
-	 * @ORM\Column(type="datetime", nullable=false)
-	 */
-	private $logTime;
+	public function __construct($logType, $comment, Order $order)
+	{
+		parent::__construct();
+		$this->logType = $logType;
+		$this->comment = $comment;
+		$this->order = $order;
+	}
 	
 	/**
 	 * Type of the event
@@ -56,12 +57,9 @@ class OrderLog extends BaseEntity
 	 */
 	public function getLogTime()
 	{
-		return $this->logTime;
+		return $this->createdAt;
 	}
-	public function setLogTime($logTime)
-	{
-		$this->logTime = $logTime;
-	}
+	
 	
 	/**
 	 * @return string 
@@ -70,10 +68,7 @@ class OrderLog extends BaseEntity
 	{
 		return $this->logType;
 	}
-	public function setLogType($logType)
-	{
-		$this->logType = $logType;
-	}
+
 	
 	/**
 	 * @return text 
@@ -82,10 +77,7 @@ class OrderLog extends BaseEntity
 	{
 		return $this->comment;
 	}
-	public function setComment($comment)
-	{
-		$this->comment = $comment;
-	}
+
 	
 	/**
 	 * @return Order
@@ -94,9 +86,5 @@ class OrderLog extends BaseEntity
 	{
 		return $this->order;
 	}
-	public function setOrder(Order $order)
-	{
-		$this->order = $order;
-	}
-	
+
 }

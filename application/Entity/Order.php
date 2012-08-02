@@ -20,6 +20,12 @@ class Order extends BaseEntity
 	const STATE_REJECTED  	= 'rejected';
 	const STATE_CLOSED		= 'closed';
 	
+	public function __construct()
+	{
+		parent::__construct();
+		$this->iteration = 0;
+		$this->state = self::STATE_OFFERED;
+	}
 	
 	/**
 	 * Current state of the order
@@ -269,7 +275,6 @@ class Order extends BaseEntity
 	{
 		$this->internalComment = $internalComment;
 	}
-	
 	
 	
 	/**

@@ -16,6 +16,11 @@ class AccountsReceivable extends BaseEntity
 	const EXPORTED 		= 'exported';
 	const UNEXPORTED 	= 'unexported';
 	
+	public function __construct(Order $order)
+	{
+		parent::__construct();
+		$this->order = $order;
+	}
 	
 	/**
 	 * Indicates whether the data is exported or not
@@ -80,6 +85,15 @@ class AccountsReceivable extends BaseEntity
 	public function setProofreaderSalarySettled($proofreaderSalarySettled)
 	{
 		$this->proofreaderSalarySettled = $proofreaderSalarySettled;
+	}
+	
+	
+	/**
+	 * @return Order  
+	 */
+	public function getOrder()
+	{
+		return $this->order;
 	}
 	
 }

@@ -13,6 +13,14 @@ use Doctrine\ORM\Mapping as ORM;
 class Document extends BaseEntity
 {
 	
+	public function __construct($name, $description, $location)
+	{
+		parent::__construct();
+		$this->name = $name;
+		$this->description = $description;
+		$this->location = $location;
+	}
+	
 	/**
 	 * Name of the document
 	 * @ORM\Column(type="string", length=128)
@@ -39,10 +47,7 @@ class Document extends BaseEntity
 	{
 		return $this->name;
 	}
-	public function setName($name)
-	{
-		$this->name = $name;
-	}
+	
 	
 	/**
 	 * @return text 
@@ -51,10 +56,7 @@ class Document extends BaseEntity
 	{
 		return $this->description;
 	}
-	public function setDescription($description)
-	{
-		$this->description = $description;
-	}
+	
 	
 	/**
 	 * @return string 
@@ -63,14 +65,5 @@ class Document extends BaseEntity
 	{
 		return $this->location;
 	}
-	public function setLocation($location)
-	{
-		$this->location = $location;
-	}
-	
-	
-	
-	
-	
 	
 }
