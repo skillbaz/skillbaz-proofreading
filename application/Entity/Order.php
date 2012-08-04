@@ -20,11 +20,18 @@ class Order extends BaseEntity
 	const STATE_REJECTED  	= 'rejected';
 	const STATE_CLOSED		= 'closed';
 	
-	public function __construct()
+	public function __construct($offeredPrice, $proofreaderSalaryOffered, User $user, Pricing $pricing, Address $address, Document $document, Field $field)
 	{
 		parent::__construct();
 		$this->iteration = 0;
 		$this->state = self::STATE_OFFERED;
+		$this->offeredPrice = $offeredPrice;
+		$this->proofreaderSalaryOffered = $proofreaderSalaryOffered;
+		$this->user = $user;
+		$this->pricing = $pricing;
+		$this->address = $address;
+		$this->finalDocument = $document;
+		$this->field = $field;
 	}
 	
 	/**
@@ -193,10 +200,6 @@ class Order extends BaseEntity
 	{
 		return $this->offeredPrice;
 	}
-	public function setOfferedPrice($offeredPrice)
-	{
-		$this->offeredPrice = $offeredPrice;
-	}
 	
 	
 	/**
@@ -218,10 +221,6 @@ class Order extends BaseEntity
 	public function getProofreaderSalaryOffered()
 	{
 		return $this->proofreaderSalaryOffered;
-	}
-	public function setProofreaderSalaryOffered($proofreaderSalaryOffered)
-	{
-		$this->proofreaderSalaryOffered = $proofreaderSalaryOffered;
 	}
 	
 	
@@ -297,10 +296,6 @@ class Order extends BaseEntity
 	{
 		return $this->user;
 	}
-	public function setUser(User $user)
-	{
-		$this->user = $user;
-	}
 	
 	
 	/**
@@ -310,10 +305,6 @@ class Order extends BaseEntity
 	{
 		return $this->address;
 	}
-	public function setAddress(Address $address)
-	{
-		$this->address = $address;
-	}
 	
 	
 	/**
@@ -322,10 +313,6 @@ class Order extends BaseEntity
 	public function getOriginalDocument()
 	{
 		return $this->originalDocument;
-	}
-	public function setOriginalDocument(Document $document)
-	{
-		$this->originalDocument = $document;
 	}
 	
 	
@@ -361,10 +348,6 @@ class Order extends BaseEntity
 //	public function getField()
 //	{
 //		return $this->field;
-//	}
-//	public function setField(Field $field)
-//	{
-//		$this->field = $field;
 //	}
 	
 	
