@@ -82,11 +82,11 @@ class User extends BaseEntity
 	private $legi;
 	
 	
-//	/**
-//	 * @var \Doctrine\Common\Collections\ArrayCollection
-//	 * @ORM\OneToMany(targetEntity="Order", mappedBy="user")
-//	 */
-//	private $orders;
+	/**
+	 * @var \Doctrine\Common\Collections\ArrayCollection
+	 * @ORM\OneToMany(targetEntity="Order", mappedBy="user")
+	 */
+	private $orders;
 	
 	
 	/**
@@ -241,12 +241,12 @@ class User extends BaseEntity
 	
 	
 	
-//	/**
-//	 * @return array
-//	 */
-//	public function getOrders(){
-//		return $this->orders;
-//	}
+	/**
+	 * @return array
+	 */
+	public function getOrders(){
+		return $this->orders;
+	}
 
 
 	/**
