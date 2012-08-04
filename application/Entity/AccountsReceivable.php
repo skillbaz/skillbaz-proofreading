@@ -14,12 +14,16 @@ class AccountsReceivable extends BaseEntity
 {
 	
 	const EXPORTED 		= 'exported';
+	const EXPORTING		= 'exporting';
 	const UNEXPORTED 	= 'unexported';
 	
 	public function __construct(Order $order)
 	{
 		parent::__construct();
 		$this->order = $order;
+		$this->state = self::UNEXPORTED;
+		$this->settledPrice = $order->getSettledPrice();
+		$this->proofreaderSalarySettled = $order->getProofreaderSalarySettled();
 	}
 	
 	/**
@@ -69,10 +73,6 @@ class AccountsReceivable extends BaseEntity
 	{
 		return $this->settledPrice;
 	}
-	public function setSettledPrice($settledPrice)
-	{
-		$this->settledPrice = $settledPrice;
-	}
 	
 	
 	/**
@@ -81,10 +81,6 @@ class AccountsReceivable extends BaseEntity
 	public function getProofreaderSalarySettled()
 	{
 		return $this->proofreaderSalarySettled;
-	}
-	public function setProofreaderSalarySettled($proofreaderSalarySettled)
-	{
-		$this->proofreaderSalarySettled = $proofreaderSalarySettled;
 	}
 	
 	

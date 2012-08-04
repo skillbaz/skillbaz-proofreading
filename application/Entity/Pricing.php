@@ -139,5 +139,28 @@ class Pricing extends BaseEntity
 	{
 		return $this->wordPrice;
 	}
+	
+	
+	/**
+	 * Callculates the Price
+	 * 
+	 * @param integer $wordCount
+	 */
+	public function calculatePrice($wordCount)
+	{
+		return 	$this->flatPrice 
+			+ 	$wordCount * $this->wordPrice;
+	}
+	
+	
+	/**
+	 * Callculcates the Sallery
+	 * 
+	 * @param integer $wordCount
+	 */
+	public function calculateSallery($wordCount)
+	{
+		// TODO!!
+	}
 
 }

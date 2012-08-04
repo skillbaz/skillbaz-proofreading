@@ -20,18 +20,25 @@ class Order extends BaseEntity
 	const STATE_REJECTED  	= 'rejected';
 	const STATE_CLOSED		= 'closed';
 	
-	public function __construct($offeredPrice, $proofreaderSalaryOffered, User $user, Pricing $pricing, Address $address, Document $document, Field $field)
+	public function __construct(User $user, Address $address, Document $document, Pricing $pricing, Field $field)
 	{
 		parent::__construct();
 		$this->iteration = 0;
 		$this->state = self::STATE_OFFERED;
-		$this->offeredPrice = $offeredPrice;
-		$this->proofreaderSalaryOffered = $proofreaderSalaryOffered;
+		
 		$this->user = $user;
-		$this->pricing = $pricing;
 		$this->address = $address;
 		$this->finalDocument = $document;
+		$this->pricing = $pricing;
 		$this->field = $field;
+
+		
+		$wordCount = $document->getWordCount();
+		$this->offeredPrice = $pricing->calculatePrice($wordCount);
+		$this->settledPrice = $this->offeredPrice;
+		
+		$this->proofreaderSalaryOffered = $pricing->calculateSallery($wordCount);
+		$this->proofreaderSalarySettled = $this->proofreaderSalaryOffered; 
 	}
 	
 	/**
