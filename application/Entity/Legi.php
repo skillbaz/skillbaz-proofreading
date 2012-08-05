@@ -24,6 +24,7 @@ class Legi extends BaseEntity
 	private $university;
 	
 	/**
+	 * $var DateTime
 	 * @ORM\Column(type="date", nullable=true)
 	 */
 	private $validity;
@@ -59,7 +60,7 @@ class Legi extends BaseEntity
 	
 
 	/**
-	 * @return date
+	 * @return DateTime
 	 */
 	public function getValidity(){
 		return $this->validity;
@@ -68,6 +69,9 @@ class Legi extends BaseEntity
 		$this->validity = $validityty;
 	}
 	
+	public function isValid(){
+		return new \DateTime('now') < $this->validity;
+	}
 	
 	/**
 	 * @return User
