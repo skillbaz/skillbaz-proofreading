@@ -240,6 +240,18 @@ class User extends BaseEntity
 	}
 	
 	
+	/**
+	 * Returns whether the User has access to Student-Prices
+	 * @return bool
+	 */
+	public function isStudent(){
+		if(is_null($this->legi)){
+			// If User has no Legi, the User is not a Student
+			return false;
+		}
+		return $this->legi->isValid();
+	}
+	
 	
 	/**
 	 * @return array

@@ -36,6 +36,18 @@ class Member extends BaseEntity
 	
 	
 	/**
+	 * @param User $user
+	 * @param Firm $firm
+	 */
+	public function __construct(User $user, Firm $firm){
+		parent::__construct();
+		
+		$this->user = $user;
+		$this->firm = $firm;
+	} 
+	
+	
+	/**
 	 * @return string
 	 */
 	public function getRole()
@@ -55,10 +67,6 @@ class Member extends BaseEntity
 	{
 		return $this->user;
 	}
-	public function setUser(User $user)
-	{
-		$this->user = $user;
-	}
 	
 	
 	/**
@@ -68,10 +76,5 @@ class Member extends BaseEntity
     {
     	return $this->firm;
     }
-	public function setFirm(Firm $firm)
-	{
-		$this->firm = $firm;
-	}
-	
 		
 }

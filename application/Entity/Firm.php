@@ -38,6 +38,19 @@ class Firm extends BaseEntity
 	 */
 	private $members;
 	
+	
+	/**
+	 * A Firm has always an address
+	 * 
+	 * @param Address $address
+	 */
+	public function __construct(Address $address){
+		parent::__construct();
+		
+		$this->address = $address;
+	}
+	
+	
 	/**
 	 * @return string
 	 */
@@ -70,14 +83,6 @@ class Firm extends BaseEntity
 	public function getAddress()
 	{
 		return $this->address;
-	}
-	
-	/**
-	 * Set the Address of this Firm Entity
-	 */
-	public function setAddress(Address $address)
-	{
-		$this->address = $address;
 	}
 	
 	

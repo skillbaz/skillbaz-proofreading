@@ -13,12 +13,18 @@ use Doctrine\ORM\Mapping as ORM;
 class Document extends BaseEntity
 {
 	
-	public function __construct($name, $description, $location)
+	public function __construct($name, $description, $location,	$wordCount)
 	{
+		if(! is_file($location)){
+			// $location is not a file!
+			throw new \Exception("[$location] is not a file");
+		}
+			
 		parent::__construct();
 		$this->name = $name;
 		$this->description = $description;
 		$this->location = $location;
+		$this->wordCount = $wordCount;
 	}
 	
 	/**
@@ -38,6 +44,13 @@ class Document extends BaseEntity
 	 * @ORM\Column(type="string", length=128)
 	 */
 	private $location;
+	
+	
+	/**
+	 * Number of words
+ 	 * @ORM\Column(type="integer")
+	 */
+	private $wordCount;
 	
 	
 	/**
@@ -64,6 +77,15 @@ class Document extends BaseEntity
 	public function getLocation()
 	{
 		return $this->location;
+	}
+	
+	
+	/**
+	 * @return integer
+	 */
+	public function getWordCount()
+	{
+		return $this->wordCount;
 	}
 	
 }

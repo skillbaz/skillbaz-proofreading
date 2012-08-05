@@ -38,7 +38,7 @@ class Login extends BaseEntity
 	 * @ORM\OneToOne(targetEntity="User", mappedBy="login")
 	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
 	 */
-	public $user;
+	private $user;
 	
 	
 	
