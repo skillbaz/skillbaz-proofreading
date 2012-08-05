@@ -142,7 +142,7 @@ class Pricing extends BaseEntity
 	
 	
 	/**
-	 * Callculates the Price
+	 * Calculates the Price
 	 * 
 	 * @param integer $wordCount
 	 */
@@ -154,7 +154,7 @@ class Pricing extends BaseEntity
 	
 	
 	/**
-	 * Callculcates the Sallery
+	 * Calculcates the Sallery
 	 * 
 	 * @param integer $wordCount
 	 */
