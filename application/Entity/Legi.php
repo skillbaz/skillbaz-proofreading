@@ -24,7 +24,7 @@ class Legi extends BaseEntity
 	private $university;
 	
 	/**
-	 * $var DateTime
+	 * @var DateTime
 	 * @ORM\Column(type="date", nullable=true)
 	 */
 	private $validity;
@@ -66,7 +66,7 @@ class Legi extends BaseEntity
 		return $this->validity;
 	}	
 	public function setValidity($validity){
-		$this->validity = $validityty;
+		$this->validity = $validity;
 	}
 	
 	public function isValid(){

@@ -33,7 +33,7 @@ class Firm extends BaseEntity
 	
 	
 	/**
-	 * @var \Doctrine\Common\Collection\ArrayCollection
+	 * @var \Doctrine\Common\Collections\ArrayCollection
 	 * @ORM\OneToMany(targetEntity="Member", mappedBy="firm")
 	 */
 	private $members;

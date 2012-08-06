@@ -35,7 +35,7 @@ class User extends BaseEntity
 	
 	
 	/**
-	 * @var \Doctrine\Common\Collection\ArrayCollection
+	 * @var \Doctrine\Common\Collections\ArrayCollection
 	 * @ORM\OneToMany(targetEntity="Member", mappedBy="user")
 	 */
 	private $members;
@@ -104,11 +104,11 @@ class User extends BaseEntity
 //	private $discussions;
 	
 	
-//	/**
-//	 * @var Entity\Proofreader
-//	 * @ORM\OneToOne(targetEntity="Proofreader", mappedBy="user")
-//	 */
-//	private $proofreader;
+	/**
+	 * @var Entity\Proofreader
+	 * @ORM\OneToOne(targetEntity="Proofreader", mappedBy="user")
+	 */
+	private $proofreader;
 	
 	
 	/**
@@ -284,10 +284,10 @@ class User extends BaseEntity
 //	}
 	
 	
-//	/**
-//	 * @return Proofreader
-//	 */
-//	public function getProofreader(){
-//		return $this->proofreader;
-//	}
+	/**
+	 * @return Proofreader
+	 */
+	public function getProofreader(){
+		return $this->proofreader;
+	}
 }
