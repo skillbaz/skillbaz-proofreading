@@ -24,7 +24,7 @@ class Rating extends BaseEntity
 	{
 		$this->proofreader = $proofreader;
 		$this->order = $order;
-		$this->auto = true;
+		$this->grade = null;
 	}
 	
 	
