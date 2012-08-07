@@ -12,14 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Field extends BaseEntity
 {
-	const FIELD_BUSINESS		='business';
-	const FIELD_ENGINEERING		='engineering';
-	const FIELD_MATHANDPHYS		='mathematics and physics';
-	const FIELD_BIOCHEMISTRY	='biology and chemistry';
-	const FIELD_LAW				='law';
-	const FIELD_SOCIALSCIENCES	='social sciences';
-	const FIELD_OTHER			='other';
-	
 	
 	public function __construct($name, $description)
 	{

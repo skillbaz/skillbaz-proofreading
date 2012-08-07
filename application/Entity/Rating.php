@@ -24,23 +24,19 @@ class Rating extends BaseEntity
 	{
 		$this->proofreader = $proofreader;
 		$this->order = $order;
+		$this->auto = true;
 	}
 	
-	/**
-	 * Indicates whether the rating was automatically generated
-	 * @ORM\Column(type="boolean", nullable=false)
-	 */
-	private $auto;
 	
 	/**
 	 * The grade that was awarded for this order
-	 * @ORM\Column(type="integer", nullable=false)
+	 * @ORM\Column(type="integer", nullable=true)
 	 */
 	private $grade;
 	
 	/**
 	 * The comment for this rating
-	 * @ORM\Column(type="text")
+	 * @ORM\Column(type="text", nullable=true)
 	 */
 	private $comment;
 	
@@ -66,11 +62,7 @@ class Rating extends BaseEntity
 	 */
 	public function getAuto()
 	{
-		return $this->auto;
-	}
-	public function setAuto($auto = true)
-	{
-		$this->auto = $auto;
+		return $this->grade == null;
 	}
 	
 	
