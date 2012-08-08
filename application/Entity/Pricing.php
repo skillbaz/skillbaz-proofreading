@@ -154,11 +154,11 @@ class Pricing extends BaseEntity
 	
 	
 	/**
-	 * Calculcates the Sallery
+	 * Calculcates the Salary
 	 * 
 	 * @param integer $wordCount
 	 */
-	public function calculateSallery($wordCount)
+	public function calculateSalary($wordCount)
 	{
 		// TODO!!
 	}

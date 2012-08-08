@@ -37,7 +37,7 @@ class Order extends BaseEntity
 		$this->offeredPrice = $pricing->calculatePrice($wordCount);
 		$this->settledPrice = $this->offeredPrice;
 		
-		$this->proofreaderSalaryOffered = $pricing->calculateSallery($wordCount);
+		$this->proofreaderSalaryOffered = $pricing->calculateSalary($wordCount);
 		$this->proofreaderSalarySettled = $this->proofreaderSalaryOffered; 
 	}
 	
@@ -135,21 +135,21 @@ class Order extends BaseEntity
 	 */
 	private $finalDocument;
 	
-//	/**
-//	 * The responsible proofreader for this order
-//	 * @var Entity\Proofreader
-//	 * @ORM\ManyToOne(targetEntity="Proofreader")
-//	 * @ORM\JoinColumn(name="proofreader_id", referencedColumnName="id")
-//	 */
-//	private $proofreader;
+	/**
+	 * The responsible proofreader for this order
+	 * @var Entity\Proofreader
+	 * @ORM\ManyToOne(targetEntity="Proofreader")
+	 * @ORM\JoinColumn(name="proofreader_id", referencedColumnName="id")
+	 */
+	private $proofreader;
 	
-//	/**
-//	 * The field of expertise which is required for this order
-//	 * @var Entity\Field
-//	 * @ORM\ManyToOne(targetEntity="Field")
-//	 * @ORM\JoinColumn(name="field_id", referencedColumnName="id")
-//	 */
-//	private $field;
+	/**
+	 * The field of expertise which is required for this order
+	 * @var Entity\Field
+	 * @ORM\ManyToOne(targetEntity="Field")
+	 * @ORM\JoinColumn(name="field_id", referencedColumnName="id")
+	 */
+	private $field;
 	
 //	/**
 //	 * The current correction for this order
@@ -165,12 +165,12 @@ class Order extends BaseEntity
 	 */
 	private $orderLogs;
 	
-//	/**
-//	 * The rating that was awarded to this order
-//	 * @var Entity\Rating
-//	 * @ORM\OneToOne(targetEntity="Rating", mappedBy="order")
-//	 */
-//	private $rating;
+	/**
+	 * The rating that was awarded to this order
+	 * @var Entity\Rating
+	 * @ORM\OneToOne(targetEntity="Rating", mappedBy="order")
+	 */
+	private $rating;
 	
 	
 	
@@ -336,26 +336,26 @@ class Order extends BaseEntity
 	}
 	
 	
-//	/**
-//	 * @return Proofreader
-//	 */
-//	public function getProofreader()
-//	{
-//		return $this->proofreader;
-//	}
-//	public function setProofreader(Proofreader $proofreader)
-//	{
-//		$this->proofreader = $proofreader;
-//	}
+	/**
+	 * @return Proofreader
+	 */
+	public function getProofreader()
+	{
+		return $this->proofreader;
+	}
+	public function setProofreader(Proofreader $proofreader)
+	{
+		$this->proofreader = $proofreader;
+	}
 
 	
-//	/**
-//	 * @return Field 
-//	 */
-//	public function getField()
-//	{
-//		return $this->field;
-//	}
+	/**
+	 * @return Field 
+	 */
+	public function getField()
+	{
+		return $this->field;
+	}
 	
 	
 //	/**
@@ -376,13 +376,13 @@ class Order extends BaseEntity
 	}
 	
 	
-//	/**
-//	 * @return Rating
-//	 */
-//	public function getRating()
-//	{
-//		return $this->rating;
-//	}
+	/**
+	 * @return Rating
+	 */
+	public function getRating()
+	{
+		return $this->rating;
+	}
 	
 		
 }
