@@ -151,12 +151,12 @@ class Order extends BaseEntity
 	 */
 	private $field;
 	
-//	/**
-//	 * The current correction for this order
-//	 * @var Entity\Correction
-//	 * @ORM\OneToOne(targetEntity="Correction", mappedBy="order")
-//	 */
-//	private $correction;
+	/**
+	 * The current correction for this order
+	 * @var Entity\Correction
+	 * @ORM\OneToOne(targetEntity="Correction", mappedBy="order")
+	 */
+	private $correction;
 	
 	/**
 	 * The logs for this order
@@ -358,13 +358,13 @@ class Order extends BaseEntity
 	}
 	
 	
-//	/**
-//	 * @return Correction
-//	 */
-//	public function getCorrection()
-//	{
-//		return $this->correction;
-//	}
+	/**
+	 * @return Correction
+	 */
+	public function getCorrection()
+	{
+		return $this->correction;
+	}
 	
 	
 	/**
