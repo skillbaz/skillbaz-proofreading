@@ -112,7 +112,7 @@ class Correction extends BaseEntity
 	{
 		return $this->proofreader;
 	}
-	public function setProofreader($proofreader)
+	public function setProofreader(Proofreader $proofreader)
 	{
 		$this->proofreader = $proofreader;
 	}
