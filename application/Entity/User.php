@@ -97,11 +97,11 @@ class User extends BaseEntity
 	private $address;
 	
 	
-//	/**
-//	 * @var \Doctrine\Common\Collections\ArrayCollection
-//	 * @ORM\OneToMany(targetEntity="Discussion", mappedBy="user")
-//	 */
-//	private $discussions;
+	/**
+	 * @var \Doctrine\Common\Collections\ArrayCollection
+	 * @ORM\OneToMany(targetEntity="Discussion", mappedBy="user")
+	 */
+	private $discussions;
 	
 	
 	/**
@@ -276,12 +276,12 @@ class User extends BaseEntity
 	}
 	
 		
-//	/**
-//	 * @return array
-//	 */
-//	public function getDiscussions(){
-//		return $this->discussions;
-//	}
+	/**
+	 * @return array
+	 */
+	public function getDiscussions(){
+		return $this->discussions;
+	}
 	
 	
 	/**
