@@ -1,6 +1,7 @@
 <?php
 
 use Core\Service\ServiceFactory;
+use Core\Entity\RepoFactory;
 
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
@@ -69,6 +70,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		// register services in kernel:
 		$this->registerService("Service\UserService");
 		$this->registerService("Service\LoginService");
+		
+		$this->registerRepositories();
 	}
 	
 	
@@ -90,6 +93,18 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		
 		// registers the service for protected calls:
 		$kernel->Bind("Acl\\" . $serviceClass)->ToFactory(new ServiceFactory($kernel, $serviceClass));
+	}
+	
+	private function registerRepositories()
+	{
+		$kernel = Zend_Registry::get("kernel");
+		
+		$em = $kernel->Get('Doctrine\ORM\EntityManager');
+		$metas = $em->getMetadataFactory()->getAllMetadata();
+		foreach($metas as $meta){
+			$repoClass = str_replace("Entity", "Repository", $meta->getName()) . 'Repository';
+			$kernel->Bind($repoClass)->ToFactory(new RepoFactory($em, $meta->getName()));
+		}
 	}
 	
 	public function _initUIdManagerSetup()
