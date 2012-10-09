@@ -31,6 +31,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		
 		$serviceAutoloader = new \Doctrine\Common\ClassLoader('Service', APPLICATION_PATH);
 		$autoloader->pushAutoloader(array($serviceAutoloader, 'loadClass'), 'Service');
+	
+		$repoAutoloader = new \Doctrine\Common\ClassLoader('Repository', APPLICATION_PATH);
+		$autoloader->pushAutoloader(array($repoAutoloader, 'loadClass'), 'Repository');
 	}
 	
 	
