@@ -10,6 +10,8 @@ use Entity\Document;
 use Entity\Rating;
 use Entity\AccountsReceivable;
 use Entity\Discussion;
+use Entity\OrderLog;
+use Entity\Correction;
 
 use Core\Service\Params;
 use Core\Service\ServiceBase;
@@ -44,6 +46,12 @@ class OrderService
 	private $orderRepo;
 	
 	/**
+	 * @var Repository\CorrectionRepository
+	 * @Inject Repository\CorrectionRepository
+	 */
+	private $correctionRepo;
+	
+	/**
 	 * @var Service\AddressService
 	 * @Inject Service\AddressService
 	 */
@@ -54,6 +62,12 @@ class OrderService
 	 * @Inject Service\DocumentService
 	 */
 	private $documentService;
+	
+	/**
+	 * @var Service\OrderLogService
+	 * @Inject Service\OrderLogService
+	 */
+	private $logService;
 	
 	
 	
@@ -74,7 +88,7 @@ class OrderService
 	 * @param Document $document
 	 * @return array
 	 */
-	public function getOffers($document)
+	public function getOffers(Document $document)
 	{
 		//Count the number of words of the selected document
 		$wordCount = $this->documentService->countWords($document);
@@ -125,9 +139,13 @@ class OrderService
 			// ERROR! Selected Field is inactive
 		}
 		
-		
 		$order = new Order($user, $address, $document, $pricing, $field);
 		$this->persist($order);
+		
+		//Create Log Entry
+		$userId = $user->getId();
+		$comment = "User $userId received an offer";
+		$this->logService->createLog(OrderLog::OFFER_CREATED, $comment, $order);
 		
 		return $order;
 	}
@@ -142,6 +160,11 @@ class OrderService
 		//Get the respective order from the context
 		$order = $this->getContext()->getOrder();
 		
+		//Check whether the state is offered
+		if($order->getState() != Order::STATE_OFFERED){
+			//Error: Order state not offered
+		}
+		
 		//Set the state to open
 		$order->setState(Order::STATE_OPEN);
 		
@@ -149,35 +172,45 @@ class OrderService
 		$recipients = $this->proofreaderRepo->findByAbility($order->getField());
 		
 			//send Mail -> to do
+				
+		//Create Log Entry
+		$userId = $this->getContext()->getUser()->getId();
+		$comment = "User $userId accepted an offer";
+		$this->logService->createLog(OrderLog::OFFER_ACCEPTED, $comment, $order);
 	}
 	
 	
 	/**
 	 * Cancels the order while it's still open
 	 */
-	public function cancelOrder($orderId)
+	public function cancelOrder()
 	{
-		//Determine the respective order
-		$order = $this->orderRepo->find($orderId);
+		//Get the order from the context
+		$order = $this->getContext()->getOrder();
 		
 		//Remove the order if the state is still open
-		if($order->getState() == Order::STATE_OPEN){
-		$this->remove($order);
-		}
+		if($order->getState() != Order::STATE_OPEN){
 			//Error: Order already in process. Cannot be deleted
+		}
+		$this->remove($order);
+
+		//Create Log Entry
+		$userId = $this->getContext()->getUser()->getId();
+		$comment = "User $userId cancelled an offer";
+		$this->logService->createLog(OrderLog::ORDER_CANCELLED, $comment, $order);
 	}
 	
 	
 	/**
 	 * Accept an uploaded correction
 	 */
-	public function acceptCorrection($orderId)
+	public function acceptCorrection()
 	{
-		//Determine the respective order
-		$order = $this->orderRepo->find($orderId);
+		//Get the order from the context
+		$order = $this->getContext()->getOrder();
 		
 		//Check if it has the status delivered
-		if(!$order->getState() == Order::STATE_DELIVERED){
+		if($order->getState() != Order::STATE_DELIVERED){
 			//Error: Order not delivered
 		}
 
@@ -188,44 +221,54 @@ class OrderService
 		
 		//Close the order
 		$this->closeOrder($orderId);
+		
+		//Create Log Entry
+		$userId = $this->getContext()->getUser()->getId();
+		$correctionId = $this->correctionRepo->getRecentCorrection($order)->getId();
+		$comment = "User $userId accepted correction $correctionId";
+		$this->logService->createLog(OrderLog::CORRECTION_ACCEPTED, $comment, $order);
 	}
 	
 	/**
 	 * Create a rating for a closed order
 	 */
-	public function createRating($orderId, $grade)
+	public function createRating($grade)
 	{
 		//Determine the respective order
-		$order = $this->orderRepo->find($orderId);
+		$order = $this->getContext()->getOrder();
 		
 		//Check whether the order is closed
-		if(!$order->getState() == Order::STATE_CLOSED){
+		if($order->getState() != Order::STATE_CLOSED){
 			//Error: Order not yet closed
 		}
 
 		//Get the automatically generated rating entity
 		$rating = $order->getRating();
 		
-		//Check whether grade is not yet set and if it is numeric, then set grade
-		if($rating->getGrade() == null && is_numeric($grade)){
-			$rating->setGrade($grade);
+		//Check whether grade is already set
+		if($rating->getGrade() != null ){
+			//Error: Grade already set
 		}
-		else{
-			//Error: Grade already set or no valid input
+		
+		//Check whether the input is numeric
+		if(!is_numeric($grade)){
+			//Error: No numeric input
 		}
+		
+		$rating->setGrade($grade);
 	}
 	
 	
 	/**
 	 * Reject a correction
 	 */
-	public function rejectCorrection($orderId, $comment)
+	public function rejectCorrection($comment)
 	{
-		//Determine the respective order
-		$order = $this->orderRepo->find($orderId);
+		//Get the order from the context
+		$order = $this->getContext()->getOrder();
 		
 		//Check whether the order is delivered
-		if(!$order->getState() == Order::STATE_DELIVERED){
+		if($order->getState() != Order::STATE_DELIVERED){
 			//Error: Order not delivered
 		}
 		
@@ -238,16 +281,23 @@ class OrderService
 		$this->persist($discussion);
 		
 			//To do: Send Mail to Admins
+			
+		//Create Log Entry
+		$userId = $user->getId();
+		$correctionId = $this->correctionRepo->getRecentCorrection($order)->getId();
+		
+		$comment = "User $userId rejected correction $correctionId";
+		$this->logService->createLog(OrderLog::CORRECTION_REJECTED, $comment, $order);
 	}
 	
 	
 	/**
 	 * Close an order after the correction is finished and accepted - InService
 	 */
-	public function closeOrder($orderId)
+	public function closeOrder()
 	{
-		//Determine the respective order
-		$order = $this->orderRepo->find($orderId);
+		//Get the order from the context
+		$order = $this->getContext()->getOrder();
 		
 		//Set its state to closed
 		$order->setState(Order::STATE_CLOSED);
@@ -259,18 +309,19 @@ class OrderService
 			//To do: Send Mail with Invoice
 		
 		//Save the most recent correction as final document
-		$order->finalDocument = $order->getCorrection()->getDocument();
+		$correction = $this->correctionRepo->getRecentCorrection($order);
+		$document = $correction->getDocument();
+		$order->setFinalDocument($document);
 		
 		//Remove the entities which are no longer needed
-		$order->getOriginalDocument()->remove($document);
-		$order->getCorrection()->remove($correction);
-		$order->getDiscussion()->remove($discussion);
+		$this->em->remove($order->getOriginalDocument());
+		$order->setOriginalDocument(null);
+		$this->em->remove($order->getCorrections()->getDiscussions());
+		$this->em->remove($order->getCorrections());
+		$order->setCorrections(null);
 		
 		//Unlink the proofreader from the order
-		$order->proofreader = null;
+		$order->setProofreader(null);
 	}
-	
-
-	
 	
 }

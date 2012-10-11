@@ -28,7 +28,7 @@ class Order extends BaseEntity
 		
 		$this->user = $user;
 		$this->address = $address;
-		$this->finalDocument = $document;
+		$this->originalDocument = $document;
 		$this->pricing = $pricing;
 		$this->field = $field;
 
@@ -153,10 +153,10 @@ class Order extends BaseEntity
 	
 	/**
 	 * The current correction for this order
-	 * @var Entity\Correction
-	 * @ORM\OneToOne(targetEntity="Correction", mappedBy="order")
+	 * @var \Doctrine\Common\Collections\ArrayCollection
+	 * @ORM\OneToMany(targetEntity="Correction", mappedBy="order")
 	 */
-	private $correction;
+	private $corrections;
 	
 	/**
 	 * The logs for this order
@@ -321,6 +321,10 @@ class Order extends BaseEntity
 	{
 		return $this->originalDocument;
 	}
+	public function setOriginalDocument(Document $document)
+	{
+		$this->originalDocument = $document;
+	}
 	
 	
 	/**
@@ -359,11 +363,15 @@ class Order extends BaseEntity
 	
 	
 	/**
-	 * @return Correction
+	 * @return array
 	 */
-	public function getCorrection()
+	public function getCorrections()
 	{
-		return $this->correction;
+		return $this->corrections;
+	}
+	public function setCorrections($corrections)
+	{
+		$this->corrections = $corrections;
 	}
 	
 	
