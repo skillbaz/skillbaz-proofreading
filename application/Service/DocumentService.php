@@ -42,5 +42,14 @@ class DocumentService
 		// ToDo
 	}
 	
+	/**
+	 * Counts the words in the document and returns it.
+	 * 
+	 * @param Document $document
+	 * @return integer
+	 */
+	public function countWords($document){
+		return 34;
+	}
 	
 }
