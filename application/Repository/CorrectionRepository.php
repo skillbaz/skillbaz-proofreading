@@ -18,7 +18,7 @@ class CorrectionRepository extends EntityRepository
 		$qb = $this->createQueryBuilder("c");
 		$qb->innerJoin("c.order", "o")
 			->where("o.order_id = '" . $order->getId() . "'")
-			->max("c.version");
+			->orderBy("c.version", "DESC")->setMaxResults(1);
 		
 		return $qb->getQuery()->getResult();
 	}

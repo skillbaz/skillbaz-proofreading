@@ -143,9 +143,7 @@ class OrderService
 		$this->persist($order);
 		
 		//Create Log Entry
-		$userId = $user->getId();
-		$comment = "User $userId received an offer";
-		$this->logService->createLog(OrderLog::OFFER_CREATED, $comment, $order);
+		$this->logService->offerCreated($order);
 		
 		return $order;
 	}
@@ -174,9 +172,7 @@ class OrderService
 			//send Mail -> to do
 				
 		//Create Log Entry
-		$userId = $this->getContext()->getUser()->getId();
-		$comment = "User $userId accepted an offer";
-		$this->logService->createLog(OrderLog::OFFER_ACCEPTED, $comment, $order);
+		$this->logService->offerAccepted();
 	}
 	
 	
@@ -192,12 +188,13 @@ class OrderService
 		if($order->getState() != Order::STATE_OPEN){
 			//Error: Order already in process. Cannot be deleted
 		}
+		
+		//Create Log Entry
+		$this->logService->orderCancelled();
+		
 		$this->remove($order);
 
-		//Create Log Entry
-		$userId = $this->getContext()->getUser()->getId();
-		$comment = "User $userId cancelled an offer";
-		$this->logService->createLog(OrderLog::ORDER_CANCELLED, $comment, $order);
+		
 	}
 	
 	
@@ -223,10 +220,8 @@ class OrderService
 		$this->closeOrder($orderId);
 		
 		//Create Log Entry
-		$userId = $this->getContext()->getUser()->getId();
-		$correctionId = $this->correctionRepo->getRecentCorrection($order)->getId();
-		$comment = "User $userId accepted correction $correctionId";
-		$this->logService->createLog(OrderLog::CORRECTION_ACCEPTED, $comment, $order);
+		$correction = $this->correctionRepo->getRecentCorrection($order);
+		$this->logService->correctionAccepted($correction);
 	}
 	
 	/**
@@ -274,7 +269,7 @@ class OrderService
 		
 		//Determine the inputs for the discussion
 		$user = $this->getContext()->getUser();
-		$correction = $order->getCorrection();
+		$correction = $this->correctionRepo->getRecentCorrection($order);
 		
 		//Create the discussion
 		$discussion = new Discussion($user, $correction, $comment);
@@ -283,11 +278,7 @@ class OrderService
 			//To do: Send Mail to Admins
 			
 		//Create Log Entry
-		$userId = $user->getId();
-		$correctionId = $this->correctionRepo->getRecentCorrection($order)->getId();
-		
-		$comment = "User $userId rejected correction $correctionId";
-		$this->logService->createLog(OrderLog::CORRECTION_REJECTED, $comment, $order);
+		$this->logService->correctionRejected($correction);
 	}
 	
 	
