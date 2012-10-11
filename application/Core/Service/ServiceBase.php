@@ -45,12 +45,12 @@ abstract class ServiceBase
 	
 	protected function remove($entity)
 	{
-		$this->em->persist($entity);
+		$this->em->remove($entity);
 	}
 	
 	protected function persist($entity)
 	{
-		$this->em->remove($entity);
+		$this->em->persist($entity);
 	}	
 }
 	
