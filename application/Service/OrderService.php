@@ -216,12 +216,12 @@ class OrderService
 		
 		$this->persist($rating);
 		
-		//Close the order
-		$this->closeOrder($orderId);
-		
 		//Create Log Entry
 		$correction = $this->correctionRepo->getRecentCorrection($order);
 		$this->logService->correctionAccepted($correction);
+		
+		//Close the order
+		$this->closeOrder($orderId);
 	}
 	
 	/**
@@ -267,6 +267,10 @@ class OrderService
 			//Error: Order not delivered
 		}
 		
+		if($comment == ""){
+			// Error: No comment submitted
+		}
+		
 		//Determine the inputs for the discussion
 		$user = $this->getContext()->getUser();
 		$correction = $this->correctionRepo->getRecentCorrection($order);
@@ -307,8 +311,10 @@ class OrderService
 		//Remove the entities which are no longer needed
 		$this->em->remove($order->getOriginalDocument());
 		$order->setOriginalDocument(null);
-		$this->em->remove($order->getCorrections()->getDiscussions());
-		$this->em->remove($order->getCorrections());
+				
+		foreach($order->getCorrections() as $correction){
+		$this->em->remove($correction);
+		}
 		$order->setCorrections(null);
 		
 		//Unlink the proofreader from the order

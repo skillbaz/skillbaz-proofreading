@@ -64,7 +64,7 @@ class Correction extends BaseEntity
 	/**
 	 * The corresponding discussions to this correction
 	 * @var \Doctrine\Common\Collections\ArrayCollection
-	 * @ORM\OneToMany(targetEntity="Discussion", mappedBy="correction")
+	 * @ORM\OneToMany(targetEntity="Discussion", mappedBy="correction", cascade={"remove"})
 	 */
 	private $discussions;
 	
