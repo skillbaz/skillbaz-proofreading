@@ -51,6 +51,31 @@ abstract class ServiceBase
 	protected function persist($entity)
 	{
 		$this->em->persist($entity);
-	}	
+	}
+	
+	
+	
+	protected function validationFailed($failed = true, $message = null){
+		if($failed){
+			ServiceWrapper::validationFailed();
+			
+			if($message != null){
+				ServiceWrapper::addValidationMessage($message);
+			}
+		}
+	}
+	
+	protected function validationAssert($assert = false, $message = null){
+		$this->validationFailed(!$assert, $message);
+	}
+	
+	protected function addValidationMessage($message){
+		ServiceWrapper::addValidationMessage($message);
+	}
+	
+	protected function hasFailed(){
+		ServiceWrapper::hasFailed();
+	}
+	
 }
 	

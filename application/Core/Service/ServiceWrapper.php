@@ -36,6 +36,12 @@ class ServiceWrapper
 	 */
 	private $exception = null;
 	
+	/**
+	 * @var ValidationException
+	 */
+	public static $validationException = null;
+	
+	
 	public function __construct(\Zend_Acl_Resource_Interface $service)
 	{
 		$this->service = $service;
@@ -54,6 +60,21 @@ class ServiceWrapper
 		return $this->service->getResourceId();
 	}
 	
+	
+	public static function validationFailed(){
+		if(self::$validationException == null){
+			self::$validationException = new ValidationException();
+		}
+	}
+	
+	public static function addValidationMessage($message){
+		self::validationFailed();
+		self::$validationException->addMessage($message);
+	}
+	
+	public static function hasFailed(){
+		return self::$validationException != null;
+	}
 	
 	public function __call($method, $args)
 	{
@@ -98,6 +119,7 @@ class ServiceWrapper
 	private function start()
 	{
 		$this->exception = null;
+		self::$validationException = null;
 		
 		$uow = $this->em->getUnitOfWork();
 		$uow->computeChangeSets();
@@ -116,11 +138,11 @@ class ServiceWrapper
 	
 	private function end()
 	{
-		if($this->exception != null){
+		if($this->exception != null || self::$validationException != null){
 			$this->em->getConnection()->rollback();
 			$this->em->clear();
 			
-			throw $this->exception;
+			throw $this->exception ?: self::$validationException;
 		}
 		
 		try
@@ -128,7 +150,7 @@ class ServiceWrapper
 			$this->em->flush();
 			$this->em->getConnection()->commit();
 		}
-		catch (Exception $e)
+		catch (\Exception $e)
 		{
 			$this->em->getConnection()->rollback();
 			$this->em->close();
