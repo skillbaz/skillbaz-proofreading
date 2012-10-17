@@ -3,3 +3,5 @@ log/*
 
 .*
 application/Entity/Proxy/*
+public/coverage/*
+public/unittest_results.xml
