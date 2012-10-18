@@ -9,6 +9,9 @@ use Core\Service\ServiceBase;
 
 class OrderLogService extends ServiceBase
 {
+	public function _setupAcl(){
+	}
+
 	
 	public function offerCreated(Order $order)
 	{

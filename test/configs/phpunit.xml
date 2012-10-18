@@ -1,0 +1,30 @@
+<phpunit bootstrap='../Bootstrap.php' colors="true">
+
+    <php>
+        <ini name="memory_limit" value="100M" />
+    </php>
+
+    <testsuite name="Skillbaz Proofreading UnitTests">
+        <directory>../Core</directory>
+        <directory>../Service</directory>
+    </testsuite>
+
+    <filter>
+        <whitelist>
+    		<directory suffix=".php">../../application/Core</directory>
+			<directory suffix=".php">../../application/Entity</directory>
+			<directory suffix=".php">../../application/Service</directory>
+
+			<exclude>
+				<directory suffix=".phtml">../../application</directory>
+			</exclude>
+
+        </whitelist>
+    </filter>
+
+    <logging>
+        <log type="coverage-html" target="../../public/coverage" charset="UTF-8" yui="true" highlight="true"/>
+        <log type="junit" target="../../public/unittest_results.xml" />
+    </logging>
+
+</phpunit>

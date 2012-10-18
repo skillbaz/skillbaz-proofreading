@@ -2,7 +2,7 @@
 
 namespace Core\Service;
 
-use CoreApi\Service\Params\Params;
+use Core\Service\Params;
 
 
 class ArrayParams extends Params{
