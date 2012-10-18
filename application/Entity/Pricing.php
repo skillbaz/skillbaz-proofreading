@@ -161,6 +161,7 @@ class Pricing extends BaseEntity
 	public function calculateSalary($wordCount)
 	{
 		// TODO!!
+		return 0.9 * $this->calculatePrice($wordCount);
 	}
 
 }

@@ -52,10 +52,10 @@ class ContextStorage
 		$firmId  = $this->firmId;
 		
 		$user    		= $this->getAuthUser();
-		$proofreader 	= $user->getProofreader();
+		$proofreader 	= ($user != null) ? $user->getProofreader() : null;
 		
 		$order = isset($orderId) ? $this->orderRepo->find($orderId) : null;
-		$firm  = isset($formId)  ? $this->firmRepo->find( $firmId ) : null;
+		$firm  = isset($firmId)  ? $this->firmRepo->find( $firmId ) : null;
 		
 		$this->context = new Context($user, $proofreader, $order, $firm);
 		return $this->context;

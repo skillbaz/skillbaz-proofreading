@@ -13,4 +13,13 @@ $application = new Zend_Application(
 	APPLICATION_PATH . '/configs/application.ini'
 );
 
+
+require_once APPLICATION_PATH . '/../library/Doctrine/Common/ClassLoader.php';
+$autoloader = \Zend_Loader_Autoloader::getInstance();
+
+$helperAutoloader = new \Doctrine\Common\ClassLoader('Helper', TEST_PATH);
+$autoloader->pushAutoloader(array($helperAutoloader, 'loadClass'), 'Helper');
+
+
+
 clearstatcache();
