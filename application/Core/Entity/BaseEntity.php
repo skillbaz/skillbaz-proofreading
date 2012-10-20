@@ -25,7 +25,7 @@ abstract class BaseEntity
 	 * @ORM\Id
 	 * @ORM\Column(name="id", type="string")
 	 */
-	protected $id;
+	private $id;
 	
 	
 	public function __construct()

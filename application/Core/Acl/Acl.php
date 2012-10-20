@@ -2,6 +2,9 @@
 
 namespace Core\Acl;
 
+use Entity\User;
+use Entity\Firm;
+use Entity\Member;
 
 class Acl extends \Zend_Acl
 {
@@ -109,11 +112,11 @@ class Acl extends \Zend_Acl
 		
 		if($firm != null && $user != null){
 			if($this->isMember($user, $firm)){
-				$roles = self::MEMBER;
+				$roles[] = self::MEMBER;
 			}
 			
-			if($this->isBoss($user, $form)){
-				$roles = self::BOSS;
+			if($this->isBoss($user, $firm)){
+				$roles[] = self::BOSS;
 			}
 		}
 		
@@ -127,8 +130,8 @@ class Acl extends \Zend_Acl
 	private function isMember(User $user, Firm $firm){
 		
 		$criteria = array(
-			"user_id" => $user->getId(),
-			"firm_id" => $firm->getId()
+			"user" => $user->getId(),
+			"firm" => $firm->getId()
 		);
 		
 		$member = $this->em->getRepository("Entity\Member")->findOneBy($criteria);
@@ -138,10 +141,10 @@ class Acl extends \Zend_Acl
 	}
 	
 	
-	private function isBoss(User $user, Firm $form){
+	private function isBoss(User $user, Firm $firm){
 		$criteria = array(
-			"user_id" => $user->getId(),
-			"firm_id" => $firm->getId(),
+			"user" => $user->getId(),
+			"firm" => $firm->getId(),
 			"role"    => Member::BOSS
 		);
 		

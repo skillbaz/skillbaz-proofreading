@@ -35,6 +35,7 @@ $arguments = array(
 	'listeners' => array(new PHPUnit_Util_Log_JUnit()),
 	'configuration' => $configFile);
 
+Zend_Session::start();
 
 echo "<pre>";
 PHPUnit_TextUI_TestRunner::run($testSuite, $arguments);
