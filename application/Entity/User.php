@@ -252,6 +252,11 @@ class User extends BaseEntity
 		return $this->legi->isValid();
 	}
 	
+	public function isAdmin(){
+		// TODO: 
+		return false;
+	}
+	
 	
 	/**
 	 * @return array

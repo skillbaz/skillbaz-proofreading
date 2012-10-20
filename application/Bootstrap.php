@@ -16,8 +16,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	
 		$autoloader = \Zend_Loader_Autoloader::getInstance();
 		
-		$fmmAutoloader = new \Doctrine\Common\ClassLoader('Bisna');
-		$autoloader->pushAutoloader(array($fmmAutoloader, 'loadClass'), 'Bisna');
+		$doctrineAutoloader = new \Doctrine\Common\ClassLoader('Doctrine');
+		$autoloader->pushAutoloader(array($doctrineAutoloader, 'loadClass'), 'Doctrine');
+		
+		$bisnaAutoloader = new \Doctrine\Common\ClassLoader('Bisna');
+		$autoloader->pushAutoloader(array($bisnaAutoloader, 'loadClass'), 'Bisna');
 		
 		$PhpdiAutoloader = new \Doctrine\Common\ClassLoader('PhpDI');
 		$autoloader->pushAutoloader(array($PhpdiAutoloader, 'loadClass'), 'PhpDI');
