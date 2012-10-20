@@ -26,7 +26,7 @@ class Firm extends BaseEntity
 	
 	/**
 	 * @var Entity\Address
-	 * @ORM\OneToOne(targetEntity="Address")
+	 * @ORM\OneToOne(targetEntity="Address", cascade={"all"})
 	 * @ORM\JoinColumn(name="address_id", referencedColumnName="id", nullable=false) 
 	 */
 	private $address;
