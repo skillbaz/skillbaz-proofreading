@@ -13,7 +13,7 @@ class EntitySerializer
 	private $em;
 	
 	
-	public function Serialize(BaseEntity $entity){
+	public function SerializeEntity(BaseEntity $entity){
 		
 		$class = get_class($entity);
 		$meta = $this->em->getClassMetadata($class);

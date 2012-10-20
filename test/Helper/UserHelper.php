@@ -52,7 +52,10 @@ class UserData{
 	private static $email = array(
 		'info@skillbaz.com',
 		'proofreader@skillbaz.com',
-		'customer@skillbaz.com'
+		'customer@skillbaz.com',
+		'info@skillbaz.ch',
+		'proofreader@skillbaz.ch',
+		'customer@skillbaz.ch'
 	);
 	
 	
