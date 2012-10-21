@@ -64,6 +64,12 @@ class OrderService
 	private $documentService;
 	
 	/**
+	 * @var Service\RatingService
+	 * @Inject Service\RatingService
+	 */
+	private $ratingService;
+	
+	/**
 	 * @var Service\OrderLogService
 	 * @Inject Service\OrderLogService
 	 */
@@ -75,7 +81,6 @@ class OrderService
 		$this->acl->allow(Acl::USER, $this, 'getOffers');
 		$this->acl->allow(Acl::USER, $this, 'createOrder');
 		$this->acl->allow(Acl::CUSTOMER, $this, 'acceptOrder');
-		$this->acl->allow(Acl::CUSTOMER, $this, 'createRating');
 		$this->acl->allow(Acl::CUSTOMER, $this, 'cancelOrder');
 		$this->acl->allow(Acl::CUSTOMER, $this, 'acceptCorrection');
 		$this->acl->allow(Acl::CUSTOMER, $this, 'rejectCorrection');
@@ -193,8 +198,6 @@ class OrderService
 		$this->logService->orderCancelled();
 		
 		$this->remove($order);
-
-		
 	}
 	
 	
@@ -212,9 +215,7 @@ class OrderService
 		}
 
 		//Create a new rating entity with a nulled grade -> automatically generated
-		$rating = new Rating($order->getProofreader(), $order);
-		
-		$this->persist($rating);
+		$this->ratingService->createRating();
 		
 		//Create Log Entry
 		$correction = $this->correctionRepo->getRecentCorrection($order);
@@ -222,35 +223,6 @@ class OrderService
 		
 		//Close the order
 		$this->closeOrder($orderId);
-	}
-	
-	/**
-	 * Create a rating for a closed order
-	 */
-	public function createRating($grade)
-	{
-		//Determine the respective order
-		$order = $this->getContext()->getOrder();
-		
-		//Check whether the order is closed
-		if($order->getState() != Order::STATE_CLOSED){
-			//Error: Order not yet closed
-		}
-
-		//Get the automatically generated rating entity
-		$rating = $order->getRating();
-		
-		//Check whether grade is already set
-		if($rating->getGrade() != null ){
-			//Error: Grade already set
-		}
-		
-		//Check whether the input is numeric
-		if(!is_numeric($grade)){
-			//Error: No numeric input
-		}
-		
-		$rating->setGrade($grade);
 	}
 	
 	
