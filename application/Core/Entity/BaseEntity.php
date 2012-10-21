@@ -28,6 +28,14 @@ abstract class BaseEntity
 	private $id;
 	
 	
+	/**
+	 * @var Entity\UId
+	 * @ORM\OneToOne(targetEntity="Entity\UId", cascade={"persist", "remove"})
+	 * @ORM\JoinColumn(name="id", referencedColumnName="id")
+	 */
+	private $uid;
+	
+	
 	public function __construct()
 	{
 		/**
@@ -41,6 +49,9 @@ abstract class BaseEntity
 	
 		$this->updatedAt = new \DateTime();
 		$this->updatedAt->setTimestamp(0);
+		
+		$this->uid = new \Entity\UId(get_class($this));
+		$this->id = $this->uid->getId();
 	}
 	
 	

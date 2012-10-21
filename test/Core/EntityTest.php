@@ -31,13 +31,11 @@ class EntityTest extends PHPUnit_Framework_TestCase {
 	}
 	
 	public function testPersistAndRemoveEntity(){
-		
 		$uidRepo = $this->em->getRepository('Entity\UId');
 		
 		$this->em->getConnection()->beginTransaction();
-		$user = Helper\UserHelper::Create($this->em);
-		$this->em->getConnection()->commit();
 		
+		$user = Helper\UserHelper::Create($this->em);
 		$userUid = $uidRepo->find($user->getId());
 		
 		$this->assertNotNull($userUid);
@@ -45,14 +43,14 @@ class EntityTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($user->getId(), $userUid->getId());
 		
 		
-		$this->em->getConnection()->beginTransaction();
 		$this->em->remove($user);
 		$this->em->flush();
-		$this->em->getConnection()->commit();
 		
 		$uidRepo->clear();
 		$userUid = $uidRepo->find($user->getId());
 		$this->assertNull($userUid);
+		
+		$this->em->getConnection()->rollback();
 	}
 	
 	
