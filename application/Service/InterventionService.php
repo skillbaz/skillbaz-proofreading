@@ -5,11 +5,12 @@ namespace Service;
 use Core\Acl\Acl;
 use Entity\Order;
 use Entity\Correction;
+use Entity\Discussion;
 
 use Core\Service\ServiceBase;
 
 
-class OrderService extends ServiceBase
+class InterventionService extends ServiceBase
 {
 	/**
 	 * @var Service\OrderService
@@ -28,11 +29,11 @@ class OrderService extends ServiceBase
 	 * @Inject Repository\CorrectionRepository
 	 */
 	private $correctionRepo;
-	
+
 	
 	public function _setupAcl(){
 		$this->acl->allow(Acl::ADMIN, $this, 'closeOrder');
-		$this->acl->allow(Acl::RESPONSIBLE_PROOFREADER, $this, 'reworkCorrection');
+		$this->acl->allow(Acl::ADMIN, $this, 'reworkCorrection');
 		$this->acl->allow(Acl::ADMIN, $this, 'revokeOrder');
 		$this->acl->allow(Acl::ADMIN, $this, 'reopenOrder');
 	}
@@ -41,7 +42,7 @@ class OrderService extends ServiceBase
 	/**
 	 * Force-close an order
 	 */
-	public function closeOrder($comment, $price)
+	public function closeOrder($publicComment, $price, $salary)
 	{
 		$order = $this->getContext()->getOrder();
 		
@@ -55,19 +56,26 @@ class OrderService extends ServiceBase
 			$order->setSettledPrice($price);
 		}
 		
+		//Set the proofreader's salary
+		$order->setProofreaderSalarySettled($salary);
+		
+		//Set the external commment
+		$order->setPublicComment($publicComment);
+		
 		//Create log entry
-			//To do: Log (OrderLog noch im PR)
-			
+		$this->logService->orderForceClosed($publicComment);			
+		
+		//Close the order
 		$this->orderService->closeOrder();
 	}
 	
 	
 	/**
 	 * Rework a correction by the same proofreader
-	 * @param String $internalComment
+	 * @param String $externalComment
 	 * @param \DateTime $deadline
 	 */
-	public function reworkCorrection($internalComment, \DateTime $deadline)
+	public function reworkCorrection($publicComment, \DateTime $deadline)
 	{
 		$order = $this->getContext()->getOrder();
 		
@@ -76,9 +84,9 @@ class OrderService extends ServiceBase
 			//Error: Order not rejected
 		}
 		
-		//Check whether this is the first iteration, if not - inform the admins about the rework
+		//Check whether this is the first iteration, if not - inform the admins
 		if(0 < $order->getIteration()){
-			//To do: Send Mail to admins
+			//To do: Make an exclamation mark and alarm signals!
 		}
 		
 		//Increase the iteration by 1
@@ -88,16 +96,29 @@ class OrderService extends ServiceBase
 		$correction = $this->correctionRepo->getRecentCorrection($order);
 		$discussions = $correction->getDiscussions();
 		
-		//Set the internal comment and add the deadline
-		$order->setInternalComment($internalComment . " /Deadline: " . $deadline);
+		//Construct the internal comment for the proofreader and the admins by looping the discussions
+		foreach($discussions as $discussion){
+			//Evaluate who made the comment and make him anonymous
+			switch ($discussion->getUser()){
+				case $order->getUser(): $commentor = "Customer: ";
+				case $order->getProofreader(): $commentor = "Proofreader: ";
+				default: $commentor = "Admin: ";
+			}
+			$internalComment .= $discussion->createdAt() . "by " . $commentor . $discussion->getComment();
+		}
+		$order->setInternalComment($internalComment);
 		
-		//Set the discussions as public comment and add the deadline
-		$order->setPublicComment($discussions . " /Deadline: " . $deadline);
+		//Set the public comment which the customer is able to see
+		$order->setPublicComment($publicComment);
+		
+		//Set a new deadline
+		$order->setDeadline($deadline);
 		
 		//Set the state of the order back to working
 		$order->setState(Order::STATE_WORKING);
 			
-			//To do: Log Entry
+		//Create the log entry
+		$this->logService->orderInRework($publicComment);
 	}
 	
 	
@@ -106,7 +127,7 @@ class OrderService extends ServiceBase
 	 * @param String $internalComment
 	 * @param \DateTime $deadline
 	 */
-	public function revokeOrder($internalComment, \DateTime $deadline)
+	public function revokeOrder($publicComment, \DateTime $deadline, $proofreaderSalarySettled, $settledPrice)
 	{
 		$order = $this->getContext()->getOrder();
 		
@@ -118,18 +139,32 @@ class OrderService extends ServiceBase
 		//Increase the iteration by 1
 		$order->setIteration(++$order->getIteration());
 		
-		//Set the internal comment and add the deadline
+		//Construct the internal comment for the proofreader and the admins by looping the discussions
+		foreach($discussions as $discussion){
+			//Evaluate who made the comment and make him anonymous
+			switch ($discussion->getUser()){
+				case $order->getUser(): $commentor = "Customer: ";
+				case $order->getProofreader(): $commentor = "Proofreader: ";
+				default: $commentor = "Admin: ";
+			}
+			$internalComment .= $discussion->createdAt() . "by " . $commentor . $discussion->getComment();
+		}
 		$order->setInternalComment($internalComment);
 		
-		//Set the discussions as public comment and add the deadline
-		$order->setPublicComment("Deadline: " . $deadline);
+		//Set public comment for the customer
+		$order->setPublicComment($publicComment);
+		
+		//Set the new deadline, salary and price
+		$order->setDeadline($deadline);
+		$order->setProofreaderSalarySettled($proofreaderSalarySettled);
+		$order->setSettledPrice($settledPrice);
 		
 		//Set the state of the order back to open
 		$order->setState(Order::STATE_OPEN);
 			//To do: Send Mail to proofreaers
 		
 		//Create log entry
-			// To do: Log (OrderLog noch im PR)
+		$this->logService->orderRevoked($publicComment);
 			
 		$order->setProofreader(null);
 	}
@@ -137,24 +172,26 @@ class OrderService extends ServiceBase
 	/**
 	 * Reopen an already taken order and remove the proofreader
 	 */
-	public function reopenOrder()
+	public function reopenOrder($proofreaderSalarySettled)
 	{
 		$order = $this->getContext()->getOrder();
 		if($order->getState() != Order::STATE_WORKING){
 			//Error: Order not in state 'working'.
 		}
 		
+		//Set the new proofreader salary
+		$order->setProofreaderSalarySettled($proofreaderSalarySettled);
+		
 		//Set the state back to open
 		$order->setState(Order::STATE_OPEN);
 			
-		//Reset the iteration and the proofreader
-		$order->setIteration(0);
+		//Reset the proofreader
 		$order->setProofreader(null);
 		
 			//To do: Send Mail to Proofreaders
 		
 		//Create log entry
-			//To do: Log (OrderLog noch im PR)
+		$this->logService->orderReopened();
 	}
 	
 }

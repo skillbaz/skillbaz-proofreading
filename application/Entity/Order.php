@@ -30,9 +30,9 @@ class Order extends BaseEntity
 		$this->address = $address;
 		$this->originalDocument = $document;
 		$this->pricing = $pricing;
+		$this->deadline = new \DateTime("now") + $pricing->getDuration();
 		$this->field = $field;
 
-		
 		$wordCount = $document->getWordCount();
 		$this->offeredPrice = $pricing->calculatePrice($wordCount);
 		$this->settledPrice = $this->offeredPrice;
@@ -76,6 +76,12 @@ class Order extends BaseEntity
 	 * @ORM\Column(type="decimal", precision=8, scale=2)
 	 */
 	private $proofreaderSalarySettled;
+	
+	/**
+	 * The deadline of the order
+	 * @ORM\Column(type="datetime")
+	 */
+	private $deadline;
 	
 	/**
 	 * Customer's reason for rejecting the first correction
@@ -243,6 +249,17 @@ class Order extends BaseEntity
 		$this->proofreaderSalarySettled = $proofreaderSalarySettled;
 	}
 	
+	/**
+	 * @return datetime   
+	 */
+	public function getDeadline()
+	{
+		return $this->deadline;
+	}
+	public function setDeadline($deadline)
+	{
+		$this->deadline = $deadline;
+	}
 	
 	/**
 	 * @return text 
