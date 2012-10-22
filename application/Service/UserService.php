@@ -22,6 +22,12 @@ class UserService
 	 */
 	private $orderRepo;
 	
+	/**
+	 * @var Repository\UserRepository
+	 * @Inject Repository\UserRepository
+	 */
+	private $userRepo;
+	
 	
 	public function _setupAcl(){
 		$this->acl->allow(Acl::USER, $this, 'deleteUser');
@@ -36,10 +42,14 @@ class UserService
 	/**
 	 * Creates a new user entity
 	 */
-	public function createUser()
+	public function createUser(Params $params)
 	{
+		//Create new user entity
 		$user = new User();
 		$this->persist($user);
+		
+		//Update the relevant information
+		$this->updateUser($params);
 	}
 	
 	
@@ -72,6 +82,7 @@ class UserService
 		$firstname = $params->getValue('firstname');
 		if(null == $firstname){
 			$params->addMessage('firstname', 'Please provide a valid firstname');
+			$this->validationFailed();
 		}
 		elseif($firstname != $user->getFirstname()){
 			$user->setFirstname($firstname);
@@ -81,6 +92,7 @@ class UserService
 		$surname = $params->getValue('surname');
 		if(null == $surname){
 			$params->addMessage('surname', 'Please provide a valid surname');
+			$this->validationFailed();
 		}
 		elseif($surname != $user->getSurname()){
 			$user->setSurname($surname);
@@ -90,6 +102,7 @@ class UserService
 		$email = $params->getValue('email');
 		if(!$mailValidator->isValid($email)){
 			$params->addMessage('email', 'Please provide a valid email address');
+			$this->validationFailed();
 		}
 		elseif($email != $user->getEmail()){
 			$user->setEmail($email);
@@ -99,6 +112,7 @@ class UserService
 		$skype = $params->getValue('skype');
 		if(null == $skype){
 			$params->addMessage('skype', 'Please provide a valid skype address');
+			$this->validationFailed();
 		}
 		elseif($skype != $user->getSkype()){
 			$user->setSkype($skype);
@@ -108,6 +122,7 @@ class UserService
 		$preflanguage = $params->getValue('preflanguage');
 		if(null == $preflanguage){
 			$params->addMessage('preflanguage', 'Please provide a valid language');
+			$this->validationFailed();
 		}
 		elseif($preflanguage != $user->getPrefLanguage()){
 			$user->setPrefLanguage($preflanguage);
@@ -135,6 +150,7 @@ class UserService
 		$street = $params->getValue('street');
 		if(null == $street){
 			$params->addMessage('street', 'Please provide a valid street');
+			$this->validationFailed();
 		}
 		elseif($street != $address->getStreet()){
 			$address->setStreet($street);
@@ -144,6 +160,7 @@ class UserService
 		$zipcode = $params->getValue('zipcode');
 		if(null == $zipcode){
 			$params->addMessage('zipcode', 'Please provide a valid zipcode');
+			$this->validationFailed();
 		}
 		elseif($zipcode != $address->getZipcode()){
 			$address->setZipcode($zipcode);
@@ -153,6 +170,7 @@ class UserService
 		$city = $params->getValue('city');
 		if(null == $city){
 			$params->addMessage('city', 'Please provide a valid city');
+			$this->validationFailed();
 		}
 		elseif($city != $address->getCity()){
 			$address->setCity($city);
@@ -162,6 +180,7 @@ class UserService
 		$country = $params->getValue('country');
 		if(null == $country){
 			$params->addMessage('country', 'Please provide a valid country');
+			$this->validationFailed();
 		}
 		elseif($country != $address->getCountry()){
 			$address->setCountry($country);
@@ -194,6 +213,7 @@ class UserService
 		$legiNumber = $params->getValue('legiNumber');
 		if(null == $legiNumber){
 			$params->addMessage('legiNumber', 'Please provide a valid legi number');
+			$this->validationFailed();
 		}
 		elseif($legiNumber != $legi->getLegiNumber()){
 			$legi->setLegiNumber($legiNumber);
@@ -203,6 +223,7 @@ class UserService
 		$university = $params->getValue('university');
 		if(null == $university){
 			$params->addMessage('university', 'Please provide a valid university');
+			$this->validationFailed();
 		}
 		elseif($university != $legi->getUniversity()){
 			$legi->setUniversity($university);
@@ -212,20 +233,22 @@ class UserService
 		$validity = $params->getValue('validity');
 		if(null == $validity){
 			$params->addMessage('validity', 'Please enter a validity date');
+			$this->validationFailed();
 		}
 		$legi->setValidity($validity);
 		if(!$legi->isValid()){
 			$params->addMessage('validity', 'Your legi has already expired');
+			$this->validationFailed();
 		}
 	}
 	
 	
 	/**
-	 * Active a user
+	 * Activate a user
 	 */
-	public function activateUser()
+	public function activateUser($userId)
 	{
-		$user = $this->getContext()->getUser();
+		$user = $this->userRepo->find($userId);
 		$user->setActive();
 	}
 	
@@ -233,9 +256,9 @@ class UserService
 	/**
 	 * Deactivate a user
 	 */
-	public function deactivateUser()
+	public function deactivateUser($userId)
 	{
-		$user = $this->getContext()->getUser();
+		$user = $this->userRepo->find($userId);
 		$user->setActive(false);
 	}
 	
