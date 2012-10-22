@@ -60,14 +60,26 @@ class ProofreadingService extends ServiceBase
 	 */
 	public function uploadCorrection($params)
 	{
-		//Create a new document entity
+		//Get the relevant information
 		$document = $this->documentService->createDocument($params);
 		$order = $this->getContext()->getOrder();
+		$proofreader = $this->getContext()->getProofreader();
 		
-		//Create a new correction for the order
-		$correction = new Correction($order, $document);
-		$this->persist($correction);
-
+		//Check whether there is already a correction for this order iteration
+		$correction = $this->correctionRepo->getRecentCorrection($order);
+		if( $correction != null && $correction->getVersion() == $order->getIteration()){
+			
+			//If yes, just update the document and the responsible proofreader
+			$correction->setDocument($document);
+			$correction->setProofreader($proofreader);
+		}
+		else{
+			//If not, create a new correction and set the proofreader accordingly
+			$correction = new Correction($order, $document);
+			$correction->setProofreader($proofreader);
+			$this->persist($correction);
+		}
+		
 		//Create log entry
 		$this->logService->correctionUploaded($correction);
 	}
