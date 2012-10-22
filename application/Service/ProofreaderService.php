@@ -9,20 +9,36 @@ use Core\Acl\Acl;
 use Core\Service\Params;
 use Core\Service\ServiceBase;
 
+
 class ProofreaderService extends ServiceBase
 {
+	
+	/**
+	 * @var Repository\ProofreaderRepository
+	 * @Inject Repository\ProofreaderRepository
+	 */
+	private $proofreaderRepo;
+	
+	/**
+	 * @var Repository\UserRepository
+	 * @Inject Repository\UserRepository
+	 */
+	private $userRepo;
+	
+	
 	public function _setupAcl()
 	{
 		$this->acl->allow(Acl::PROOFREADER, $this, 'deleteProofreader');
+		$this->acl->allow(Acl::ADMIN, $this, 'deleteProofreader');
 		$this->acl->allow(Acl::PROOFREADER, $this, 'updateProofreader');
 	}
 	
 	/**
 	 * Delete the proofreader entity of a certain user
 	 */
-	public function deleteProofreader()
+	public function deleteProofreader($proofreaderId)
 	{
-		$proofreader = $this->getContext()->getProofreader();
+		$proofreader = $this->proofreaderRepo->find($proofreaderId);
 		if(null != $proofreader->getOrders()){
 			//Error: There are still open orders
 		}
@@ -41,8 +57,13 @@ class ProofreaderService extends ServiceBase
 		$active = $params->getValue('active');
 		if(!is_bool($active)){
 			$params->addMessage('active', 'This is not a valid entry');
+			$this->validationFailed();
 		}
-		elseif($active != $proofreader->getActive()){
+		if($active != $proofreader->getActive()){
+			if(null != $proofreader->getOrders()){
+				$params->addMessage('active', 'There are still open orders');
+				$this->validationFailed();
+			}
 			$proofreader->setActive($active);
 		}
 		
@@ -53,13 +74,11 @@ class ProofreaderService extends ServiceBase
 	/**
 	 * Create a new proofreader entity and connect it to a certain user
 	 */
-	public function createProofreader()
+	public function createProofreader($userId)
 	{
-		$user = $this->getContext()->getUser();
+		$user = $this->userRepo->find($userId);
 		$proofreader = new Proofreader($user);
 		$this->persist($proofreader);
 	}
-	
-	
 	
 }
