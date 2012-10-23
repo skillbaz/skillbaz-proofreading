@@ -65,6 +65,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		Zend_Registry::set("kernel", $kernel);
 		
 		$kernel->Bind("PhpDI\Kernel")->ToConstant($kernel);
+		$kernel->Bind("PhpDI\IKernel")->ToConstant($kernel);
 		$kernel->Bind("Doctrine\ORM\EntityManager")
 				->ToConstant(Zend_Registry::get('doctrineContainer')->getEntityManager());
 		

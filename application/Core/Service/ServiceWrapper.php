@@ -20,8 +20,8 @@ class ServiceWrapper
 	private $kernel;
 	
 	/**
-	 * @var Acl\Acl
-	 * @Inject Acl\Acl
+	 * @var Core\Acl\Acl
+	 * @Inject Core\Acl\Acl
 	 */
 	private $acl;
 	

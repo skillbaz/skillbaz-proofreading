@@ -31,6 +31,17 @@ isset($phpunit['bootstrap']) &&
 
 $testSuite = $configuration->getTestSuiteConfiguration();
 
+if(isset($_GET['test'])) {
+	$testName = $_GET['test'];
+	
+	foreach($testSuite->tests() as $test){
+		if($test->getName() == $testName){
+			$testSuite = $test;
+			break;
+		}
+	}
+}
+
 $arguments = array(
 	'listeners' => array(new PHPUnit_Util_Log_JUnit()),
 	'configuration' => $configFile);

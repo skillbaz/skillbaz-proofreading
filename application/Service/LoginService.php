@@ -2,7 +2,7 @@
 
 namespace Service;
 
-use Acl\Acl;
+use Core\Acl\Acl;
 use Core\Service\ServiceBase;
 
 
@@ -17,6 +17,8 @@ class LoginService extends ServiceBase
 	
 	public function _setupAcl(){
 		$this->acl->allow(Acl::GUEST, 	$this, 'login');
+		$this->acl->allow(Acl::GUEST, 	$this, 'passwordLost');
+		$this->acl->allow(Acl::GUEST, 	$this, 'resetPassword');
 		$this->acl->allow(Acl::USER, 	$this, 'logout');
 		$this->acl->allow(Acl::USER, 	$this, 'changePassword');
 	}
@@ -31,11 +33,7 @@ class LoginService extends ServiceBase
 		/** @var Entity\User */
 		$user = $this->userService->getUserByIdentifier($identifier);
 		
-		/** @var Entity\Login */
-		if(is_null($user))	{	$login = null;	}
-		else				{	$login = $user->getLogin();		}
-		
-		$authAdapter = new \Core\Auth\Adapter($login, $password);
+		$authAdapter = new \Core\Auth\Adapter($user, $password);
 		$result = \Zend_Auth::getInstance()->authenticate($authAdapter);
 		
 		return $result;
