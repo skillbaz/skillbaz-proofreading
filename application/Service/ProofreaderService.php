@@ -3,6 +3,7 @@
 namespace Service;
 
 use Entity\Proofreader;
+use Entity\User;
 
 use Core\Acl\Acl;
 
@@ -36,9 +37,8 @@ class ProofreaderService extends ServiceBase
 	/**
 	 * Delete the proofreader entity of a certain user
 	 */
-	public function deleteProofreader($proofreaderId)
+	public function deleteProofreader(Proofreader $proofreader)
 	{
-		$proofreader = $this->proofreaderRepo->find($proofreaderId);
 		if(null != $proofreader->getOrders()){
 			//Error: There are still open orders
 		}
@@ -74,9 +74,8 @@ class ProofreaderService extends ServiceBase
 	/**
 	 * Create a new proofreader entity and connect it to a certain user
 	 */
-	public function createProofreader($userId)
+	public function createProofreader(User $user)
 	{
-		$user = $this->userRepo->find($userId);
 		$proofreader = new Proofreader($user);
 		$this->persist($proofreader);
 	}
