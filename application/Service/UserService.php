@@ -61,7 +61,8 @@ class UserService
 		$user = $this->getContext()->getUser();
 		
 		//Check whether the user has still open orders
-		if(null != $this->orderRepo->findOpenOrders($user)){
+		$openOrders = $this->orderRepo->findOpenOrders($user);
+		if(!empty($openOrders)){
 			//Error: There are still open orders
 		}
 		
@@ -236,10 +237,6 @@ class UserService
 			$this->validationFailed();
 		}
 		$legi->setValidity($validity);
-		if(!$legi->isValid()){
-			$params->addMessage('validity', 'Your legi has already expired');
-			$this->validationFailed();
-		}
 	}
 	
 	
