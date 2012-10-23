@@ -62,47 +62,6 @@ class OrderLogService extends ServiceBase
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	/**
 	 * Intervention Service specific logs
 	 */
@@ -143,13 +102,5 @@ class OrderLogService extends ServiceBase
 		$log = new OrderLog(OrderLog::ORDER_REOPENED, $comment, $order);
 		$this->persist($log);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }

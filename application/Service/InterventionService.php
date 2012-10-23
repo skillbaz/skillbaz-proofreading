@@ -52,7 +52,7 @@ class InterventionService extends ServiceBase
 		}
 		
 		//Check whether the settled price is lower than the offered price and if it is numeric
-		if($order->getOfferedPrice() > $price && is_numeric($price)){
+		if(is_numeric($price) && $order->getOfferedPrice() > $price){
 			$order->setSettledPrice($price);
 		}
 		
@@ -92,21 +92,8 @@ class InterventionService extends ServiceBase
 		//Increase the iteration by 1
 		$order->setIteration(++$order->getIteration());
 		
-		//Get the respective correction and the corresponding discussions
-		$correction = $this->correctionRepo->getRecentCorrection($order);
-		$discussions = $correction->getDiscussions();
-		
-		//Construct the internal comment for the proofreader and the admins by looping the discussions
-		foreach($discussions as $discussion){
-			//Evaluate who made the comment and make him anonymous
-			switch ($discussion->getUser()){
-				case $order->getUser(): $commentor = "Customer: ";
-				case $order->getProofreader(): $commentor = "Proofreader: ";
-				default: $commentor = "Admin: ";
-			}
-			$internalComment .= $discussion->createdAt() . "by " . $commentor . $discussion->getComment();
-		}
-		$order->setInternalComment($internalComment);
+		//Construct the internal comment and save it
+		$order->setInternalComment($this->createInternalComment($order));
 		
 		//Set the public comment which the customer is able to see
 		$order->setPublicComment($publicComment);
@@ -139,17 +126,8 @@ class InterventionService extends ServiceBase
 		//Increase the iteration by 1
 		$order->setIteration(++$order->getIteration());
 		
-		//Construct the internal comment for the proofreader and the admins by looping the discussions
-		foreach($discussions as $discussion){
-			//Evaluate who made the comment and make him anonymous
-			switch ($discussion->getUser()){
-				case $order->getUser(): $commentor = "Customer: ";
-				case $order->getProofreader(): $commentor = "Proofreader: ";
-				default: $commentor = "Admin: ";
-			}
-			$internalComment .= $discussion->createdAt() . "by " . $commentor . $discussion->getComment();
-		}
-		$order->setInternalComment($internalComment);
+		//Construct the internal comment and save it
+		$order->setInternalComment($this->createInternalComment($order));
 		
 		//Set public comment for the customer
 		$order->setPublicComment($publicComment);
@@ -194,4 +172,22 @@ class InterventionService extends ServiceBase
 		$this->logService->orderReopened();
 	}
 	
+	public function createInternalComment($order)
+	{
+		//Get the respective correction and the corresponding discussions
+		$correction = $this->correctionRepo->getRecentCorrection($order);
+		$discussions = $correction->getDiscussions();
+		
+		//Construct the internal comment for the proofreader and the admins by looping the discussions
+		foreach($discussions as $discussion){
+			//Evaluate who made the comment and make him anonymous
+			switch ($discussion->getUser()){
+				case $order->getUser(): $commentor = "Customer: ";
+				case $order->getProofreader(): $commentor = "Proofreader: ";
+				default: $commentor = "Admin: ";
+			}
+			$internalComment .= $discussion->createdAt() . "by " . $commentor . $discussion->getComment();
+		}
+		return $internalComment;
+	}
 }
