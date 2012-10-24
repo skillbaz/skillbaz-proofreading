@@ -20,10 +20,6 @@ class ProofreaderRepository
 		return $qb->getQuery()->getResult();
 		
 	}
-	
-		
-		
-		
 		
 
 }
