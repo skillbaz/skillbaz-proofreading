@@ -27,7 +27,7 @@ class Login extends BaseEntity
 	
 	
 	/**
-	 * @ORM\Column(type="string", length=64, nullable=true)
+	 * @ORM\Column(type="string", length=64, nullable=true, unique=true)
 	 * @var string
 	 */
 	private $pwResetKey;
@@ -68,7 +68,7 @@ class Login extends BaseEntity
 	 */
 	public function createPwResetKey()
 	{
-		$this->pwResetKey = md5(unique(microtime(true)));
+		$this->pwResetKey = md5(uniqid(microtime(true)));
 		return $this->pwResetKey; 
 	}
 	

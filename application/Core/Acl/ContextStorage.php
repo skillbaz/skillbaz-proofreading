@@ -30,6 +30,9 @@ class ContextStorage
 	
 	private $context = null;
 
+	public function clear(){
+		$this->context = null;
+	}
 	
 	public function set($orderId, $firmId)
 	{
@@ -67,9 +70,13 @@ class ContextStorage
 	 */
 	public function getAuthUser()
 	{
-		$meId = \Zend_Auth::getInstance()->getIdentity();
+		$meId = $this->getAuthUserId();
 		$me = isset($meId) ? $this->userRepo->find(  $meId  ) : null;
 		return $me;
 	}
 
+	
+	private function getAuthUserId(){
+		return \Zend_Auth::getInstance()->getIdentity();
+	}
 }

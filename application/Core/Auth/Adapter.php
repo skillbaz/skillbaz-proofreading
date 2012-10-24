@@ -29,9 +29,10 @@ class Adapter
     private $password;
 
 
-    public function __construct(\Entity\Login $login, $password)
+    public function __construct(\Entity\User $user = null, $password = null)
     {
-        $this->login = $login;
+    	$this->user = $user;
+        $this->login = ($user != null) ? $user->getLogin() : null;
         $this->password = $password;
     }
 
@@ -51,10 +52,6 @@ class Adapter
                 self::NOT_FOUND_MESSAGE
             );
         }
-        
-        
-        /** @var $user \Entity\User */
-        $this->user = $this->login->getUser();
 
 
         // User Not Activated:
@@ -93,6 +90,11 @@ class Adapter
         if( !is_array( $messages ) )
         {	$messages = array($messages);	}
 
-		return new \Zend_Auth_Result($code, $this->user->getId(), $messages);
+        if($this->user != null){
+			return new \Zend_Auth_Result($code, $this->user->getId(), $messages);
+        }
+        else{
+        	return new \Zend_Auth_Result($code, null, $messages);
+        }
     }
 }
