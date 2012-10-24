@@ -104,6 +104,10 @@ class Correction extends BaseEntity
 	{
 		return $this->document;
 	}
+	public function setDocument(Document $document)
+	{
+		$this->document = $document;
+	}
 	
 	/**
 	 * @return Proofreader  

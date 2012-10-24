@@ -6,7 +6,7 @@ use Core\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Repository\UserRepository")
  * @ORM\Table(name="users")
  *
  */
@@ -91,7 +91,7 @@ class User extends BaseEntity
 	
 	/**
 	 * @var Entity\Address
-	 * @ORM\OneToOne(targetEntity="Address", mappedBy="user")
+	 * @ORM\OneToOne(targetEntity="Address", cascade={"all"})
 	 * @ORM\JoinColumn(name="address_id", referencedColumnName="id")
 	 */
 	private $address;

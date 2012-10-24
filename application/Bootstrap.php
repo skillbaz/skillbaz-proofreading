@@ -65,6 +65,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		Zend_Registry::set("kernel", $kernel);
 		
 		$kernel->Bind("PhpDI\Kernel")->ToConstant($kernel);
+		$kernel->Bind("PhpDI\IKernel")->ToConstant($kernel);
 		$kernel->Bind("Doctrine\ORM\EntityManager")
 				->ToConstant(Zend_Registry::get('doctrineContainer')->getEntityManager());
 		
@@ -112,17 +113,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 			$kernel->Bind($repoClass)->ToFactory(new RepoFactory($em, $meta->getName()));
 		}
 	}
-	
-	public function _initUIdManagerSetup()
-	{
-		$kernel = Zend_Registry::get("kernel");
-		
-		/** Setup UIdManager: */
-		$UIdManager = $kernel->Get('Core\Entity\UIdManager');
-		$em = $kernel->Get('Doctrine\ORM\EntityManager');
-		$em->getEventManager()->addEventListener(array('prePersist', 'preRemove'), $UIdManager);
-	}
-	
 	
 	public function _initRoute()
 	{
