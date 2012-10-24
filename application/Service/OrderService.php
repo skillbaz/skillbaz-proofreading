@@ -222,7 +222,7 @@ class OrderService
 		$this->logService->correctionAccepted($correction);
 		
 		//Close the order
-		$this->closeOrder($orderId);
+		$this->closeOrder();
 	}
 	
 	

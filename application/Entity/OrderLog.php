@@ -17,6 +17,10 @@ class OrderLog extends BaseEntity
 	const OFFER_ACCEPTED		=	'offer accepted';
 	const ORDER_CANCELLED		=	'order cancelled';
 	const ORDER_TAKEN			=	'order taken';
+	const ORDER_FORCECLOSED		=	'order force-closed';
+	const ORDER_REVOKED			=	'order revoked';
+	const ORDER_REWORK			=	'order in rework';
+	const ORDER_REOPENED		=	'order reopened';
 	const CORRECTION_UPLOADED 	=	'correction uploaded';
 	const CORRECTION_COMMITTED 	= 	'correction committed';
 	const CORRECTION_ACCEPTED 	=	'correction accepted';
