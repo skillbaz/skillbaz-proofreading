@@ -3,13 +3,9 @@
 namespace Service;
 
 use Entity\User;
-
 use Entity\Member;
-
 use Entity\Address;
-
 use Entity\Firm;
-
 use Core\Acl\Acl;
 
 use Core\Service\ServiceBase;
@@ -24,6 +20,18 @@ class FirmService extends ServiceBase
 	 */
 	private $orderRepo;
 	
+	/**
+	 * @var Repository\MemberRepository
+	 * @Inject Repository\MemberRepository
+	 */
+	private $memberRepo;
+	
+	/**
+	 * @var Service\AddressService
+	 * @Inject Service\AddressService
+	 */
+	private $addressService;
+	
 	
 	public function _setupAcl(){
 		$this->acl->allow(Acl::USER, $this, 'createFirm');
@@ -33,6 +41,7 @@ class FirmService extends ServiceBase
 		$this->acl->allow(Acl::BOSS, $this, 'kickMember');
 		$this->acl->allow(Acl::BOSS, $this, 'deleteFirm');
 		$this->acl->allow(Acl::BOSS, $this, 'updateFirm');
+		$this->acl->allow(Acl::BOSS, $this, 'updateAddress');
 		$this->acl->allow(Acl::MEMBER, $this, 'leaveFirm');
 	}
 	
@@ -49,6 +58,7 @@ class FirmService extends ServiceBase
 		$this->persist($address);
 		$this->persist($firm);
 	}
+	
 	
 	/**
 	 * Add a certain user as member to the firm
@@ -115,6 +125,7 @@ class FirmService extends ServiceBase
 			//To do: Send Mail with link for shortened registration
 	}
 	
+	
 	/**
 	 * Edit the role of a certain member
 	 */
@@ -130,6 +141,7 @@ class FirmService extends ServiceBase
 			$member->setRole($role);
 		}
 	}
+	
 	
 	/**
 	 * Kick a member from the firm
@@ -176,6 +188,7 @@ class FirmService extends ServiceBase
 		$this->remove($firm);
 	}
 	
+	
 	/**
 	 * Update the information of a firm
 	 */
@@ -202,8 +215,6 @@ class FirmService extends ServiceBase
 		elseif($description != $firm->getDescription()){
 			$firm->setDescription($description);
 		}
-		
-		//$address // In seperater Funktion machen!
 	}
 	
 	/**
@@ -211,9 +222,11 @@ class FirmService extends ServiceBase
 	 */
 	public function updateAddress(Params $params)
 	{
+		//Get the address instance from the context
 		$address = $this->getContext()->getFirm()->getAddress();
 		
-		//
+		//Update it with the information from the params
+		$this->addressService->updateAddress($address, $params);
 	}
 	
 	
@@ -222,8 +235,15 @@ class FirmService extends ServiceBase
 	 */
 	public function leaveFirm()
 	{
+		//Get the user and the respective firm from the context
 		$user = $this->getContext()->getUser();
-		//$user->getMembers() blabla
+		$firm = $this->getContext()->getFirm();
+		
+		//Find the specific member instance
+		$member = $this->memberRepo->findMembership($firm, $user);
+		
+		//Remove it
+		$this->remove($member);
 	}
 	
 	
