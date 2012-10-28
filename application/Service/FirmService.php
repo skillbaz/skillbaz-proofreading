@@ -206,6 +206,16 @@ class FirmService extends ServiceBase
 		//$address // In seperater Funktion machen!
 	}
 	
+	/**
+	 * Update the address of a firm
+	 */
+	public function updateAddress(Params $params)
+	{
+		$address = $this->getContext()->getFirm()->getAddress();
+		
+		//
+	}
+	
 	
 	/**
 	 * Leave a firm
