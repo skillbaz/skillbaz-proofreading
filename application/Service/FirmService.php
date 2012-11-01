@@ -48,7 +48,7 @@ class FirmService extends ServiceBase
 	/**
 	 * Create a new firm
 	 */
-	public function createFirm()
+	public function createFirm(Params $params)
 	{
 		//Create a new address and firm instance
 		$address = new Address();
@@ -57,6 +57,10 @@ class FirmService extends ServiceBase
 		//Persist them
 		$this->persist($address);
 		$this->persist($firm);
+		
+		//Update the information of the firm
+		$this->updateFirm($params);
+		$this->updateAddress($params);
 	}
 	
 	
