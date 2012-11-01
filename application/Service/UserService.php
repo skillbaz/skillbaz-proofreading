@@ -50,6 +50,8 @@ class UserService
 		
 		//Update the relevant information
 		$this->updateUser($params);
+		
+		return $user;
 	}
 	
 	

@@ -2,6 +2,8 @@
 
 namespace Service;
 
+use Entity\Login;
+
 use Core\Acl\Acl;
 use Core\Service\ServiceBase;
 
@@ -24,8 +26,21 @@ class LoginService extends ServiceBase
 	}
 	
 	
-	public function createLogin(){
+	public function createLogin($password, User $user){
+		//Create a new login instance
+		$login = new Login();
 		
+		//Check the length of the password
+		if(8 >= strlen($password)){
+			$this->validationFailed(true, 'Password too short');
+		}
+		
+		//Set the user and the respective password
+		$login->setNewPassword($password);
+		$login->setUser($user);
+		
+		//Persist the login instance
+		$this->persist($login);
 	}
 	
 	
