@@ -27,7 +27,7 @@ class ProofreaderRepository
 		$qb = $this->createQueryBuilder("pr");
 		$qb->orderBy("pr.active");
 	
-		return $qb->getQuery->getResult();
+		return $qb->getQuery()->getResult();
 	}
 		
 

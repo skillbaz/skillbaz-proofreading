@@ -4,6 +4,7 @@ namespace Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Entity\AccountsReceivable;
+use Entity\Order;
 
 
 class AccountsReceivableRepository extends EntityRepository
@@ -17,6 +18,18 @@ class AccountsReceivableRepository extends EntityRepository
 	{
 		$qb = $this->createQueryBuilder("ar");
 		$qb->where('ar.state = ' . $state);
+		
+		return $qb->getQuery()->getResult();
+	}
+	
+	/**
+	 * Get a certain account receivable from an order
+	 * @param Order $order
+	 */
+	public function getSingleAccountReceivable(Order $order)
+	{
+		$qb = $this->createQueryBuilder("ar");
+		$qb->where("ar.order = '" . $order->getId() . "'");
 		
 		return $qb->getQuery()->getResult();
 	}

@@ -37,22 +37,46 @@ class AdministrationService extends ServiceBase
 	
 	
 	public function _setupAcl(){
-		$this->acl->allow(Acl::ADMIN, $this, 'exportFinishedOrdersData');
+		$this->acl->allow(Acl::ADMIN, $this, 'markFinishedOrdersForExport');
+		$this->acl->allow(Acl::ADMIN, $this, 'markForExport');
+		$this->acl->allow(Acl::ADMIN, $this, 'exportMarkedOrders');
 		$this->acl->allow(Acl::ADMIN, $this, 'exportOrdersData');
 		$this->acl->allow(Acl::ADMIN, $this, 'exportProofreadersData');
 		$this->acl->allow(Acl::ADMIN, $this, 'exportUsersData');
 	}
 	
-	
 	/**
-	 * Export all finished orders, which have not yet been exported
+	 * Changes the status of all new acc-recs to exporting
 	 */
-	public function exportFinishedOrdersData()
+	public function markFinishedOrdersForExport()
 	{
 		$accRecs = $this->accRecRepo->getAccountsReceivable(AccountsReceivable::UNEXPORTED);
+		foreach($accRecs as $accRec){
+			$accRec->setState(AccountsReceivable::EXPORTING);
+		}
+	}
+	
+	/**
+	 * Changes the status of a single acc-rec to exporting
+	 * @param Order $order
+	 */
+	public function markForExport(Order $order)
+	{
+		$accRec = $this->accRecRepo->getSingleAccountReceivable($order);
+		$accRec->setState(AccountsReceivable::EXPORTING);
+	}
+
+	/**
+	 * Exports all marked accounts receivables to a csv file and sets their status to exported
+	 */
+	public function exportMarkedOrders()
+	{
+		$accRecs = $this->accRecRepo->getAccountsReceivable(AccountsReceivable::EXPORTING);
 		
-			// To do: Visualize $accRecs and return the list
-			
+		$this->createCsv("AccRecs", $accRecs, $accRec);
+		
+			//To do: Return the document to the browser, ready for download and check whether it has worked
+		
 		foreach($accRecs as $accRec){
 			$accRec->setState(AccountsReceivable::EXPORTED);
 		}
@@ -65,7 +89,9 @@ class AdministrationService extends ServiceBase
 	{
 		$orders = $this->orderRepo->getAllOrders();
 		
-			// To do: Visualize nicely and return the list
+		$this->createCsv("Orders", $orders, $order);
+		
+		//To do: Return the document to the browser, ready for download and check whether it has worked
 	}
 	
 	/**
@@ -75,7 +101,9 @@ class AdministrationService extends ServiceBase
 	{
 		$proofreaders = $this->proofreaderRepo->getAllProofreaders();
 		
-			// To do: Calculate their rating data, visualize nicely and return
+		$this->createCsv("Proofreaders", $proofreaders, $proofreader);
+		
+		//To do: Return the document to the browser, ready for download and check whether it has worked
 	}
 	
 	/**
@@ -85,7 +113,22 @@ class AdministrationService extends ServiceBase
 	{
 		$users = $this->userRepo->getAllUsers();
 		
-			// To do: Visualize nicely and return
+		$this->createCsv("Users", $users, $user);
+		
+		//To do: Return the document to the browser, ready for download and check whether it has worked
+	}
+	
+	/**
+	 * Creates a csv file from an array
+	 */
+	public function createCsv($name, $array, $fields)
+	{
+		$fp = fopen($name . ".csv", 'w');
+		foreach ($array as $fields) {
+			fputcsv($fp, $fields);
+		}
+		
+		fclose($fp);
 	}
 	
 }

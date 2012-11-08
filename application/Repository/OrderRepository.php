@@ -24,7 +24,7 @@ class OrderRepository extends EntityRepository
 		$qb = $this->createQueryBuilder("o");
 		$qb->orderBy("o.deadline", "ASC");
 		
-		return $qb->getQuery->getResult();
+		return $qb->getQuery()->getResult();
 	}
 }
 

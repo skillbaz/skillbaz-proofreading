@@ -10,11 +10,10 @@ class UserRepository extends EntityRepository
 	//Method to get all users
 	public function getAllUsers()
 	{
-		$qb = $this->createQueryBuilder("pr");
-		$qb-> where('u.proofreader = ' . null)
-			->orderBy("u.active");
+		$qb = $this->createQueryBuilder("u");
+		$qb->where("u.active = true");
 	
-		return $qb->getQuery->getResult();
+		return $qb->getQuery()->getResult();
 	}
 	
 }
