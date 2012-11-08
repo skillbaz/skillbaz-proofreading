@@ -32,7 +32,7 @@ class LoginService extends ServiceBase
 		
 		//Check the length of the password
 		if(8 >= strlen($password)){
-			$this->validationFailed(true, 'Password too short');
+			$this->validationFailed(true, 'Password must consist of at least 8 characters');
 		}
 		
 		//Set the user and the respective password
