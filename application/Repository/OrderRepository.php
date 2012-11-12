@@ -19,7 +19,7 @@ class OrderRepository extends EntityRepository
 	}
 	
 	//Method to get all orders arranged by their deadline
-	public function getAllOrders()
+	public function findAllOrders()
 	{
 		$qb = $this->createQueryBuilder("o");
 		$qb->orderBy("o.deadline", "ASC");

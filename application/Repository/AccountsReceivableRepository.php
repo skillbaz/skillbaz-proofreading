@@ -14,7 +14,7 @@ class AccountsReceivableRepository extends EntityRepository
 	 * Get all accounts receivable with a certain status
 	 * @param String $state
 	 */
-	public function getAccountsReceivable($state)
+	public function findByState($state)
 	{
 		$qb = $this->createQueryBuilder("ar");
 		$qb->where('ar.state = ' . $state);
@@ -26,7 +26,7 @@ class AccountsReceivableRepository extends EntityRepository
 	 * Get a certain account receivable from an order
 	 * @param Order $order
 	 */
-	public function getSingleAccountReceivable(Order $order)
+	public function findByOrder(Order $order)
 	{
 		$qb = $this->createQueryBuilder("ar");
 		$qb->where("ar.order = '" . $order->getId() . "'");

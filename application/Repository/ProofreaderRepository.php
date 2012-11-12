@@ -22,7 +22,7 @@ class ProofreaderRepository
 	}
 	
 	//Method to get all proofreaders
-	public function getAllProofreaders()
+	public function findAllProofreaders()
 	{
 		$qb = $this->createQueryBuilder("pr");
 		$qb->orderBy("pr.active");

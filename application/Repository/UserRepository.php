@@ -8,7 +8,7 @@ class UserRepository extends EntityRepository
 {
 	
 	//Method to get all users
-	public function getAllUsers()
+	public function findAllUsers()
 	{
 		$qb = $this->createQueryBuilder("u");
 		$qb->where("u.active = true");

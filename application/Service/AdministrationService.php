@@ -50,7 +50,7 @@ class AdministrationService extends ServiceBase
 	 */
 	public function markFinishedOrdersForExport()
 	{
-		$accRecs = $this->accRecRepo->getAccountsReceivable(AccountsReceivable::UNEXPORTED);
+		$accRecs = $this->accRecRepo->findByState(AccountsReceivable::UNEXPORTED);
 		foreach($accRecs as $accRec){
 			$accRec->setState(AccountsReceivable::EXPORTING);
 		}
@@ -62,7 +62,7 @@ class AdministrationService extends ServiceBase
 	 */
 	public function markForExport(Order $order)
 	{
-		$accRec = $this->accRecRepo->getSingleAccountReceivable($order);
+		$accRec = $this->accRecRepo->findByOrder($order);
 		$accRec->setState(AccountsReceivable::EXPORTING);
 	}
 
@@ -71,11 +71,21 @@ class AdministrationService extends ServiceBase
 	 */
 	public function exportMarkedOrders()
 	{
-		$accRecs = $this->accRecRepo->getAccountsReceivable(AccountsReceivable::EXPORTING);
+		$accRecs = $this->accRecRepo->findByState(AccountsReceivable::EXPORTING);
 		
-		$this->createCsv("AccRecs", $accRecs, $accRec);
+		$fp = fopen("accRecs.csv", 'w');
+		foreach ($accRecs as $row) {
+			$row = array(
+					"order_id" => $row->getOrder()->getId(),
+					"settled_price" => $row->getSettledPrice(),
+					"settled_salary" => $row->getProofreaderSalarySettled());
+			
+			fputcsv($fp, $row);
+		}
+	
+		fclose($fp);
 		
-			//To do: Return the document to the browser, ready for download and check whether it has worked
+			//To do: Check whether it has worked
 		
 		foreach($accRecs as $accRec){
 			$accRec->setState(AccountsReceivable::EXPORTED);
@@ -87,11 +97,38 @@ class AdministrationService extends ServiceBase
 	 */
 	public function exportOrdersData()
 	{
-		$orders = $this->orderRepo->getAllOrders();
+		$orders = $this->orderRepo->findAllOrders();
 		
-		$this->createCsv("Orders", $orders, $order);
+		$fp = fopen("Orders.csv", 'w');
+		foreach ($orders as $row) {
+			$row = array(
+					"order_id" => $row->getId(),
+					"state" => $row->getState(),
+					"iteration" => $row->getIteration(),
+					"offered_price" => $row->getOfferedPrice(),
+					"settled_price" => $row->getSettledPrice(),
+					"offered_salary" => $row->getProofreaderSalaryOffered(),
+					"settled_salary" => $row->getProofreaderSalarySettled(),
+					"deadline" => $row->getDeadline(),
+					"description" => $row->getDescription(),
+					"public_comment" => $row->getPublicComment(),
+					"internal_comment" => $row->getInternalComment(),
+					"pricing_scheme" => $row->getPricing()->getName(),
+					"user_id" => $row->getUser()->getId(),
+					"order_street" => $row->getAddress()->getStreet(),
+					"order_zipcode" => $row->getAddress()->getZipcode(),
+					"order_city" => $row->getAddress()->getCity(),
+					"order_country" => $row->getAddress()->getCountry(),
+					"proofreader_id" => $row->getProofreader()->getId(),
+					"field" => $row->getField(),
+					"rating" => $row->getRating()->getGrade());
+			
+			fputcsv($fp, $row);
+		}
+	
+		fclose($fp);
 		
-		//To do: Return the document to the browser, ready for download and check whether it has worked
+		//To do: Check whether it has worked
 	}
 	
 	/**
@@ -99,11 +136,24 @@ class AdministrationService extends ServiceBase
 	 */
 	public function exportProofreadersData()
 	{
-		$proofreaders = $this->proofreaderRepo->getAllProofreaders();
+		$proofreaders = $this->proofreaderRepo->findAllProofreaders();
 		
-		$this->createCsv("Proofreaders", $proofreaders, $proofreader);
+		$fp = fopen("Proofreaders.csv", 'w');
+		foreach ($proofreaders as $row) {
+			$row = array(
+					"proofreader_id" => $row->getId(),
+					"active" => $row->getActive(),
+					"user_id" => $row->getUser()->getId());
+						
+						// To do: Get Abilities into seperate fields
+						// To do: Calculate the mean of the ratings and save it
+			
+			fputcsv($fp, $row);
+		}
+	
+		fclose($fp);
 		
-		//To do: Return the document to the browser, ready for download and check whether it has worked
+		//To do: Check whether it has worked
 	}
 	
 	/**
@@ -111,24 +161,32 @@ class AdministrationService extends ServiceBase
 	 */
 	public function exportUsersData()
 	{
-		$users = $this->userRepo->getAllUsers();
+		$users = $this->userRepo->findAllUsers();
 		
-		$this->createCsv("Users", $users, $user);
-		
-		//To do: Return the document to the browser, ready for download and check whether it has worked
-	}
-	
-	/**
-	 * Creates a csv file from an array
-	 */
-	public function createCsv($name, $array, $fields)
-	{
-		$fp = fopen($name . ".csv", 'w');
-		foreach ($array as $fields) {
-			fputcsv($fp, $fields);
+		$fp = fopen("Users.csv", 'w');
+		foreach ($users as $row) {
+			$row = array(
+					"user_id" => $row->getId(),
+					"active" => $row->getActive(),
+					"firstname" => $row->getFirstname(),
+					"surname" => $row->getSurname(),
+					"email" => $row->getEmail(),
+					"skype" => $row->getSkype(),
+					"language" => $row->getPrefLanguage(),
+					"student" => $row->isStudent(),
+					"admin" => $row->isAdmin(),
+					"user_street" => $row->getAddress()->getStreet(),
+					"user_zipcode" => $row->getAddress()->getZipcode(),
+					"user_city" => $row->getAddress()->getCity(),
+					"user_country" => $row->getAddress()->getCountry(),
+					"proofreader" => $row->getProofreader()->getId());
+			
+			fputcsv($fp, $row);
 		}
-		
+	
 		fclose($fp);
+		
+		//To do: Check whether it has worked
 	}
 	
 }
