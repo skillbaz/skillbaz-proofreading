@@ -17,6 +17,15 @@ class OrderRepository extends EntityRepository
 		
 		return $qb->getQuery()->getResult();
 	}
+
+	public function findOpenOrdersByAddress(Address $address)
+	{
+		$qb = $this->createQueryBuilder("o");
+		$qb->where("o.address = '" . $address . "'")
+			->andwhere('o.state != ' . Order::STATE_CLOSED);
+		
+		return $qb->getQuery()->getResult();
+	}
 	
 	//Method to get all orders arranged by their deadline
 	public function findAllOrders()
@@ -27,4 +36,3 @@ class OrderRepository extends EntityRepository
 		return $qb->getQuery()->getResult();
 	}
 }
-
