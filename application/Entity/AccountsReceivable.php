@@ -6,7 +6,7 @@ use Core\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Repository\AccountsReceivableRepository")
  * @ORM\Table(name="accounts_receivable")
  *
  */
