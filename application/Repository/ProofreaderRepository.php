@@ -20,6 +20,15 @@ class ProofreaderRepository
 		return $qb->getQuery()->getResult();
 		
 	}
+	
+	//Method to get all proofreaders
+	public function findAllProofreaders()
+	{
+		$qb = $this->createQueryBuilder("pr");
+		$qb->orderBy("pr.active");
+	
+		return $qb->getQuery()->getResult();
+	}
 		
 
 }
